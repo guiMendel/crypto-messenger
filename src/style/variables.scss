@@ -1,0 +1,81 @@
+// Colors
+$transparent: #00000000;
+
+$good: #0C9FC4;
+$light: #0A42CF;
+$main: #2B00B8;
+$strong: #A00ACF;
+$bad: #C7025E;
+
+$background: #1A0226;
+$text: #EDA4E5;
+
+$good-trans: #0C9FC434;
+$light-trans: #0A42CF34;
+$main-trans: #2B00B834;
+$strong-trans: #A00ACF34;
+$bad-trans: #C7025E34;
+
+// Misc
+$border-radius: 20px;
+
+@mixin light-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: $strong;
+
+  gap: 0.3rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  background-color: $transparent;
+  transition: all 100ms;
+
+  border-radius: $border-radius;
+
+  &:hover {
+    background-color: $main-trans;
+
+    box-shadow: 0 0 0 0.5rem $main-trans;
+  }
+}
+
+@mixin preview {
+  min-width: 10rem;
+
+  padding: 0.6rem 1rem;
+  border-radius: $border-radius;
+  background-color: $main-trans;
+
+  align-items: center;
+  gap: 1rem;
+
+  cursor: pointer;
+
+  transition: all 100ms;
+
+  .text {
+    flex: 1;
+
+    flex-direction: column;
+    gap: 0.2rem;
+
+    text-align: left;
+
+    p {
+      font-weight: 600;
+    }
+
+    small {
+      color: $main;
+      font-weight: 600;
+    }
+  }
+
+  &:hover {
+    filter: brightness(1.1);
+  }
+}
