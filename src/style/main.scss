@@ -54,7 +54,8 @@ input[type='button'] {
 }
 
 body {
-  font-family: Cairo, 'Josefin Sans', 'Source Sans Pro', Helvetica, Arial, sans-serif;
+  font-family: Cairo, 'Josefin Sans', 'Source Sans Pro', Helvetica, Arial,
+    sans-serif;
   font-size: 1.2rem;
 
   -webkit-font-smoothing: antialiased;
@@ -68,19 +69,21 @@ body {
   background-color: $background;
 }
 
-// Use flexbox always
-div,
-main,
-section,
-header,
-footer,
-form,
-label,
-span,
-button {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+body > :not(*[class^='dynamic-']) {
+  // Use flexbox always
+  div,
+  main,
+  section,
+  header,
+  footer,
+  form,
+  label,
+  span,
+  button {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 // Style links
