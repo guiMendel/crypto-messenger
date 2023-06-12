@@ -1,15 +1,40 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom'
-import Login from '../views/Login'
+import RequireLogin from '../components/RequireLogin'
 import Chats from '../views/Chats'
+import Login from '../views/Login'
 
 export const router = createBrowserRouter([
+  // Authenticated routes
   {
     path: '/',
-    errorElement: <Navigate to="/" />,
-    element: <Chats />,
+    element: (
+      <RequireLogin authenticationState="authenticated" redirectTo="/login" />
+    ),
+    children: [
+      {
+        path: '',
+        element: <Chats />,
+      },
+    ],
   },
+
+  // Unauthenticated routes
   {
     path: '/login',
-    element: <Login />,
+    element: (
+      <RequireLogin authenticationState="not authenticated" redirectTo="/" />
+    ),
+    children: [
+      {
+        path: '',
+        element: <Login />,
+      },
+    ],
+  },
+
+  // Unrecognized routes
+  {
+    path: '*',
+    element: <Navigate to="/" />,
   },
 ])
