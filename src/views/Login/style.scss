@@ -35,7 +35,7 @@
 
     .panel {
       flex: 1;
-      
+
       text-align: left;
 
       gap: 2rem;
@@ -46,7 +46,7 @@
         animation-fill-mode: both;
 
         filter: drop-shadow(3px 3px 0px $good);
-        
+
         @keyframes rainbow {
           0% {
             color: $light;
@@ -64,6 +64,8 @@
         line-height: 1.5rem;
         font-weight: 500;
 
+        font-family: Inter, 'Titillium Web', 'Josefin Sans', 'Source Sans Pro',
+          Helvetica, Arial, sans-serif;
       }
 
       button {
