@@ -4,6 +4,7 @@
   width: 100%;
   min-height: 100vh;
 
+  display: flex;
   align-items: center;
   justify-content: center;
 
@@ -12,6 +13,7 @@
   background-size: cover;
 
   main {
+    display: flex;
     align-items: center;
     max-width: 90%;
 
@@ -38,7 +40,9 @@
 
       text-align: left;
 
+      display: flex;
       gap: 2rem;
+      flex-direction: column;
 
       h1 {
         animation: rainbow 3s;

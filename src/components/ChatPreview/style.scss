@@ -1,0 +1,14 @@
+@import '/src/style/variables.scss';
+
+.chat-preview {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+  justify-content: flex-start;
+
+  max-width: 70%;
+  overflow: hidden;
+
+  @include preview;
+}

@@ -51,7 +51,7 @@ input[type='button'] {
 }
 
 body {
-  font-family: 'Titillium Web', 'Josefin Sans', 'Source Sans Pro', Helvetica,
+  font-family: 'Inter', 'Josefin Sans', 'Source Sans Pro', Helvetica,
     Arial, sans-serif;
 
   -webkit-font-smoothing: antialiased;
@@ -67,23 +67,6 @@ body {
     $background 0%,
     $background2 100%
   );
-}
-
-body > :not(*[class^='dynamic-']) {
-  // Use flexbox always
-  div,
-  main,
-  section,
-  header,
-  footer,
-  form,
-  label,
-  span,
-  button {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
 }
 
 // Style links

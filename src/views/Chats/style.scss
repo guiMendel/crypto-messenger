@@ -1,16 +1,22 @@
 @import '/src/style/variables.scss';
 
 #chats {
+  display: flex;
+
   width: 100%;
   min-height: 100vh;
 
   align-items: center;
-  justify-content: center;
+  // justify-content: center;
 
   main {
-    max-width: min(100%, 20rem);
+    display: flex;
+    flex-direction: column;
 
-    padding: 2rem 1rem;
+    // max-width: min(90%, 20rem);
+    max-width: 90%;
+
+    padding: 2rem 2rem;
 
     align-items: center;
     gap: 2rem;
@@ -21,6 +27,17 @@
     box-shadow: 0 0 20px 1px $background-trans;
 
     .chats {
+      max-width: 100%;
+      width: min-content;
+      
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .no-chats {
+      display: flex;
+      flex-direction: column;
       align-items: center;
       gap: 2rem;
 
