@@ -1,24 +1,24 @@
 // Colors
 $transparent: #00000000;
 
-$good: #0C9FC4;
-$light: #0A42CF;
-$main: #2B00B8;
-$strong: #A00ACF;
-$bad: #C7025E;
+$good: #0c9fc4;
+$light: #0a42cf;
+$main: #2b00b8;
+$strong: #a00acf;
+$bad: #c7025e;
 
-$background: #00081F;
-$background2: #32004F;
+$background: #00081f;
+$background2: #32004f;
 $text: white;
 
-$good-trans: #0C9FC434;
-$light-trans: #0A42CF34;
-$main-trans: #2B00B834;
-$strong-trans: #A00ACF34;
-$bad-trans: #C7025E34;
+$good-trans: #0c9fc434;
+$light-trans: #0a42cf34;
+$main-trans: #2b00b834;
+$strong-trans: #a00acf34;
+$bad-trans: #c7025e34;
 
-$background-trans: #1A022634;
-$text-trans: #FFEBFD34;
+$background-trans: #1a022634;
+$text-trans: #ffebfd34;
 
 // Misc
 $border-radius: 20px;
@@ -50,9 +50,9 @@ $border-radius: 20px;
 @mixin preview {
   min-width: 10rem;
 
-  padding: 0.6rem 1rem;
+  padding: 1rem 1.5rem;
   border-radius: $border-radius;
-  background-color: $main-trans;
+  background-color: $good-trans;
 
   align-items: center;
   gap: 1rem;
@@ -61,9 +61,17 @@ $border-radius: 20px;
 
   transition: all 100ms;
 
+  .picture {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .text {
     flex: 1;
+    max-width: 75%;
 
+    display: flex;
     flex-direction: column;
     gap: 0.2rem;
 
@@ -71,11 +79,21 @@ $border-radius: 20px;
 
     p {
       font-weight: 600;
+      max-width: 100%;
+
+      // word-wrap: break-word;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+
+      margin: 0;
     }
 
     small {
-      color: $good;
-      font-weight: 600;
+      font-family: 'Titillium Web', 'Josefin Sans', 'Source Sans Pro', Helvetica;
+
+      color: rgb(210, 210, 210);
+      font-weight: 300;
     }
   }
 

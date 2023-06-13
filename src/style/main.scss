@@ -3,6 +3,8 @@
 @import './dynamic.scss';
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&family=Press+Start+2P&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
+
+*,
 *::before,
 *::after {
   margin: 0;
@@ -51,8 +53,8 @@ input[type='button'] {
 }
 
 body {
-  font-family: 'Inter', 'Josefin Sans', 'Source Sans Pro', Helvetica,
-    Arial, sans-serif;
+  font-family: 'Inter', 'Josefin Sans', 'Source Sans Pro', Helvetica, Arial,
+    sans-serif;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -62,11 +64,7 @@ body {
   min-height: 100vh;
 
   color: $text;
-  background: linear-gradient(
-    165deg,
-    $main 0%,
-    $strong 100%
-  );
+  background: linear-gradient(165deg, $main 0%, $strong 100%);
 }
 
 // Style links

@@ -1,6 +1,5 @@
 import { DynamicWidget, useDynamicContext } from '@dynamic-labs/sdk-react'
-import { useEffect } from 'react'
-import Jazzicon from 'react-jazzicon'
+import ProfilePicture from '../ProfilePicture'
 import './style.scss'
 
 export default function Profile() {
@@ -11,10 +10,9 @@ export default function Profile() {
   return (
     <div id="profile">
       {/* Profile picture */}
-      <Jazzicon
-        diameter={70}
-        seed={parseInt(primaryWallet.address.slice(2, 10), 16)}
-      />
+      <div className="picture">
+        <ProfilePicture address={primaryWallet.address} />
+      </div>
 
       {/* Dynamic options */}
       <DynamicWidget />
