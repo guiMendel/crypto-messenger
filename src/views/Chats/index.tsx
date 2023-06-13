@@ -175,7 +175,7 @@ export default function Chats() {
             <FaArrowLeft />
           </div>
 
-          <Chat />
+          <Chat isHidden={getCurrentChatAddress() == null} />
         </div>
       </div>
     </ChatContext.Provider>

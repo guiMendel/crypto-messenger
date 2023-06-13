@@ -3,4 +3,128 @@
 #chat {
   width: 100%;
   height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  font-family: 'Titillium Web', 'Josefin Sans', 'Source Sans Pro', Helvetica;
+
+  .message-scroller {
+    flex: 1;
+    max-width: 100%;
+    overflow: auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 4rem 1rem 6rem;
+
+    .messages {
+      display: flex;
+      flex-direction: column;
+
+      gap: 1rem;
+
+      $arrow-size: 0.5rem;
+
+      > * {
+        position: relative;
+
+        padding: 0.6rem 1rem;
+        text-align: left;
+
+        box-shadow: 3px 3px 10px 2px $light-trans;
+
+        &::before {
+          content: '';
+
+          position: absolute;
+          top: 0;
+          z-index: -1;
+
+          width: 0;
+          height: 0;
+
+          border-left: $arrow-size solid transparent;
+          border-right: $arrow-size solid transparent;
+
+          border-top: $arrow-size solid white;
+        }
+      }
+
+      .incoming {
+        align-self: flex-start;
+
+        background-color: $strong;
+
+        max-width: 85%;
+
+        border-radius: 0 $border-radius $border-radius $border-radius;
+
+        &::before {
+          left: calc($arrow-size * -1);
+          border-top-color: $strong;
+        }
+      }
+
+      .outgoing {
+        align-self: flex-end;
+
+        background-color: $main;
+
+        max-width: 80%;
+
+        border-radius: $border-radius 0 $border-radius $border-radius;
+
+        &::before {
+          right: calc($arrow-size * -1);
+          border-top-color: $main;
+        }
+      }
+    }
+  }
+
+  .input-panel {
+    position: absolute;
+
+    bottom: 1rem;
+
+    width: 90%;
+
+    display: flex;
+    align-items: center;
+
+    textarea {
+      width: 100%;
+      height: 3rem;
+
+      max-height: 80vh;
+      
+      border-radius: $border-radius;
+
+      resize: none;
+
+      background-color: $background2-semi-trans;
+
+      padding: 0.8rem 1rem;
+      padding-right: 3rem;
+
+      line-height: 1.3rem;
+
+      &::placeholder {
+        font-weight: 200;
+        color: rgba(255, 255, 255, 0.5);
+      }
+    }
+
+    .send {
+      position: absolute;
+
+      right: 1rem;
+      font-size: 1.5rem;
+    }
+  }
 }
