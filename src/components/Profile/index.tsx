@@ -3,19 +3,22 @@ import ProfilePicture from '../ProfilePicture'
 import './style.scss'
 
 export default function Profile() {
-  const { primaryWallet } = useDynamicContext()
+  const { primaryWallet, user } = useDynamicContext()
 
-  if (primaryWallet == null) return null
+  if (primaryWallet == null || user == null) return null
 
   return (
     <div id="profile">
       {/* Profile picture */}
-      <div className="picture">
-        <ProfilePicture address={primaryWallet.address} />
-      </div>
+      <ProfilePicture address={primaryWallet.address} />
 
-      {/* Dynamic options */}
-      <DynamicWidget />
+      <div className="vertical">
+        {/* Nickname */}
+        <h1>{user.alias}</h1>
+
+        {/* Dynamic options */}
+        <DynamicWidget />
+      </div>
     </div>
   )
 }

@@ -1,10 +1,10 @@
-import { Conversation } from '@xmtp/xmtp-js'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { FaPlus, FaSearch } from 'react-icons/fa'
+import ChatPreview from '../../components/ChatPreview'
 import Profile from '../../components/Profile'
 import { useMessenger } from '../../modules/useMessenger'
 import { ReactComponent as EmptyPicture } from './empty.svg'
 import './style.scss'
-import ChatPreview from '../../components/ChatPreview'
 
 export default function Chats() {
   const { chats } = useMessenger()
@@ -19,6 +19,29 @@ export default function Chats() {
       <main>
         {/* Profile */}
         <Profile />
+
+        {/* Main controls */}
+        <div className="controls">
+          {/* Options */}
+          <div className="options">
+            {/* Search chats */}
+            <div className="option">
+              <FaSearch />
+            </div>
+
+            {/* New chat */}
+            <div className="option">
+              <FaPlus />
+            </div>
+          </div>
+
+          {/* Searchbar */}
+          <input
+            className="search-chats"
+            type="text"
+            placeholder="Who to looking for?"
+          />
+        </div>
 
         {chats.length == 0 ? (
           // No chat messages warning

@@ -24,7 +24,7 @@ export const useMessenger = () => {
     useDynamicContext()
 
   // Unlinks wallet
-  const unlinkWallet = () =>
+  const logout = () =>
     primaryWallet == undefined
       ? null
       : handleUnlinkWallet(primaryWallet.id).then(handleLogOut)
@@ -88,7 +88,7 @@ export const useMessenger = () => {
       })
       .catch((error) => {
         console.log('failed to get messenger', error)
-        unlinkWallet()
+        logout()
 
         // Cancel signature
         setPendingText('')
@@ -156,5 +156,5 @@ export const useMessenger = () => {
     return () => stopStreaming({ value: null, done: true })
   }
 
-  return { chats }
+  return { chats, logout }
 }

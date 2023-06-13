@@ -1,7 +1,10 @@
 import './style.scss'
 import { ReactComponent as PendingAnimation } from './pending.svg'
+import { useMessenger } from '../../modules/useMessenger'
 
 export default function SignaturePending({ text }: { text: string }) {
+  const { logout } = useMessenger()
+
   if (text == '') return null
 
   return (
@@ -15,7 +18,9 @@ export default function SignaturePending({ text }: { text: string }) {
 
         {/* Text */}
         <p>{text}...</p>
-        {/* <p>We are connecting you to our messenger client...</p> */}
+
+        {/* Log out button */}
+        <button onClick={logout}>Sign out</button>
       </div>
     </div>
   )

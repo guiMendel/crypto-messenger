@@ -10,9 +10,7 @@ export default function ChatPreview({ chat }: { chat: Conversation }) {
   return (
     <div className="chat-preview">
       {/* Peer's picture */}
-      <div className="picture">
-        <ProfilePicture address={chat.peerAddress} size={40} />
-      </div>
+      <ProfilePicture address={chat.peerAddress} size={40} />
 
       {/* Conversation details */}
       <div className="text">

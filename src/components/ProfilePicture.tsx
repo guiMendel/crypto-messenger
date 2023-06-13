@@ -8,6 +8,18 @@ export default function ProfilePicture({
   size?: number
 }) {
   return (
-    <Jazzicon diameter={size ?? 70} seed={parseInt(address.slice(2, 10), 16)} />
+    <div
+      className="picture"
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <Jazzicon
+        diameter={size ?? 70}
+        seed={parseInt(address.slice(2, 10), 16)}
+      />
+    </div>
   )
 }
