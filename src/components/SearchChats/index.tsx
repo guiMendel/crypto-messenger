@@ -1,12 +1,12 @@
-import { useEffect } from 'react'
-import { useMessenger } from '../../modules/useMessenger'
+import { useContext, useEffect } from 'react'
+import { ChatContext } from '../../modules/ChatContext'
 import ChatPreview from '../ChatPreview'
 import { ReactComponent as EmptyPicture } from './empty.svg'
 import './style.scss'
 
 export default function SearchChats() {
   // Consume chats for current user
-  const { chats } = useMessenger()
+  const { chats } = useContext(ChatContext)
 
   useEffect(() => {
     console.log(chats)

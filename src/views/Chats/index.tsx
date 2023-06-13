@@ -1,10 +1,14 @@
-import { createContext, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { FaPlus, FaSearch } from 'react-icons/fa'
+import { Outlet, useNavigate, useSearchParams } from 'react-router-dom'
 import { JSX } from 'react/jsx-runtime'
+import Chat from '../../components/Chat'
 import Profile from '../../components/Profile'
-import './style.scss'
-import { Outlet, useNavigate } from 'react-router-dom'
 import { ControlInputContext } from '../../modules/ControlInputContext'
+import './style.scss'
+import { useMessenger } from '../../modules/useMessenger'
+import { ChatContext } from '../../modules/ChatContext'
+import { FaArrowLeft } from 'react-icons/fa'
 
 // Chat control options
 enum ChatOption {
@@ -36,6 +40,29 @@ const controlsData: {
 }
 
 export default function Chats() {
+  // =====================================
+  // === CHAT HANDLING
+  // =====================================
+
+  // Grabs all chats
+  const { chats } = useMessenger()
+
+  // Grab currently open chat address
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  // Open a chat
+  const openChat = (address: string) => setSearchParams({ chat: address })
+
+  // Close a chat
+  const closeChat = () => setSearchParams({})
+
+  // Get current chat
+  const getCurrentChatAddress = () => searchParams.get('chat')
+
+  // =====================================
+  // === CONTROL OPTIONS
+  // =====================================
+
   // Which chat control option is selected
   const [currentOption, setCurrentOption] = useState<null | ChatOption>(null)
 
@@ -76,48 +103,81 @@ export default function Chats() {
   // Ref to field
   const inputRef = useRef<HTMLInputElement>(null)
 
+  const closeInput = () => {
+    setCurrentOption(null)
+    setInputValue('')
+  }
+
   return (
-    <div id="chats">
-      {/* Profile & Chat Select */}
-      <main>
-        {/* Profile */}
-        <Profile />
-
-        {/* Main controls */}
-        <div className="control-panel">
-          {/* Options */}
-          <div className="options">
-            {Object.entries(controlsData).map(([option, { icon }]) => (
-              <div
-                key={option}
-                className={`option ${
-                  parseInt(option) == currentOption ? 'selected' : ''
-                }`}
-                onClick={() => setOption(option)}
-              >
-                {icon}
-              </div>
-            ))}
-          </div>
-
-          <div className={`controls ${currentOption != null ? 'active' : ''}`}>
-            {/* Input text */}
-            <input
-              ref={inputRef}
-              type="text"
-              placeholder={getOptionData()?.inputPlaceholder}
-              value={inputValue}
-              onChange={({ target }) => setInputValue(target.value)}
-            />
-          </div>
-        </div>
-
-        <ControlInputContext.Provider
-          value={{ input: inputValue, setInput: setInputValue }}
+    <ChatContext.Provider
+      value={{ chats, openChat, closeChat, getCurrentChatAddress }}
+    >
+      <div id="chats">
+        {/* Profile & Chat Select */}
+        <main
+          className={`main-menu ${
+            getCurrentChatAddress() != null ? 'hidden' : ''
+          }`}
         >
-          <Outlet />
-        </ControlInputContext.Provider>
-      </main>
-    </div>
+          {/* Profile */}
+          <Profile />
+
+          {/* Main controls */}
+          <div className="control-panel">
+            {/* Options */}
+            <div className="options">
+              {Object.entries(controlsData).map(([option, { icon }]) => (
+                <div
+                  key={option}
+                  className={`option ${
+                    parseInt(option) == currentOption ? 'selected' : ''
+                  }`}
+                  onClick={() => setOption(option)}
+                >
+                  {icon}
+                </div>
+              ))}
+            </div>
+
+            <div
+              className={`controls ${currentOption != null ? 'active' : ''}`}
+            >
+              {/* Input text */}
+              <input
+                ref={inputRef}
+                type="text"
+                placeholder={getOptionData()?.inputPlaceholder}
+                value={inputValue}
+                onChange={({ target }) => setInputValue(target.value)}
+              />
+            </div>
+          </div>
+
+          <ControlInputContext.Provider
+            value={{
+              input: inputValue,
+              setInput: setInputValue,
+              closeInput,
+            }}
+          >
+            <Outlet />
+          </ControlInputContext.Provider>
+        </main>
+
+        {/* Chat view */}
+        <div
+          className={`chat-view ${
+            getCurrentChatAddress() != null ? 'visible' : ''
+          }`}
+        >
+          {/* Back arrow */}
+          <div className="back" onClick={closeChat}>
+            <FaArrowLeft />
+          </div>
+
+          <Chat />
+        </div>
+      </div>
+    </ChatContext.Provider>
   )
 }

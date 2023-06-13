@@ -1,6 +1,6 @@
 import { useDynamicContext } from '@dynamic-labs/sdk-react'
 import { JsonRpcSigner } from '@ethersproject/providers'
-import { Client, Conversation } from '@xmtp/xmtp-js'
+import { Client, Conversation,  } from '@xmtp/xmtp-js'
 import { useContext, useEffect, useState } from 'react'
 import { SignaturePendingContext } from './SignaturePendingContext'
 
@@ -25,7 +25,7 @@ export const useMessenger = () => {
   const logout = () => (primaryWallet == undefined ? null : handleLogOut())
 
   // The messenger interface
-  const [, setMessenger] = useState<null | Client>(null)
+  const [messenger, setMessenger] = useState<null | Client>(null)
 
   // Updates the messenger and calls dependent functions
   const updateMessenger = (newMessenger: Client) => {
@@ -96,7 +96,7 @@ export const useMessenger = () => {
   }, [primaryWallet])
 
   // ===================================
-  // === CHATS
+  // === CHATS SYNCHRONIZATION
   // ===================================
 
   // Chats of the current user
@@ -151,5 +151,15 @@ export const useMessenger = () => {
     return () => stopStreaming({ value: null, done: true })
   }
 
-  return { chats, logout }
+  // ===================================
+  // === NEW CHAT
+  // ===================================
+
+  const createChat = (address: string) => {
+    if (messenger == null) return
+
+    return messenger.conversations.newConversation(address)
+  }
+
+  return { chats, logout, createChat }
 }
