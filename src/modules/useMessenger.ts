@@ -1,7 +1,9 @@
 import { useDynamicContext } from '@dynamic-labs/sdk-react'
 import { JsonRpcSigner } from '@ethersproject/providers'
 import { Client, Conversation } from '@xmtp/xmtp-js'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { SignaturePendingContext } from './SignaturePendingContext'
+import { Wallet } from 'ethers'
 
 // Useful to avoid  restarting the messenger for the same address
 let lastAddress = ''
@@ -10,15 +12,25 @@ let lastAddress = ''
 const messengerCleanups: (() => void)[] = []
 
 export const useMessenger = () => {
+  // Consume signature pending
+  const { setPendingText } = useContext(SignaturePendingContext)
+
   // ===================================
   // === MESSENGER CLIENT
   // ===================================
 
   // Get wallet from dynamic
-  const { primaryWallet } = useDynamicContext()
+  const { primaryWallet, handleUnlinkWallet, handleLogOut } =
+    useDynamicContext()
+
+  // Unlinks wallet
+  const unlinkWallet = () =>
+    primaryWallet == undefined
+      ? null
+      : handleUnlinkWallet(primaryWallet.id).then(handleLogOut)
 
   // The messenger interface
-  const [messenger, setMessenger] = useState<null | Client>(null)
+  const [, setMessenger] = useState<null | Client>(null)
 
   // Updates the messenger and calls dependent functions
   const updateMessenger = (newMessenger: Client) => {
@@ -35,6 +47,8 @@ export const useMessenger = () => {
   useEffect(() => {
     // If no wallet, no messenger
     if (primaryWallet == null) {
+      console.log('no wallet found')
+
       setMessenger(null)
       lastAddress = ''
       return
@@ -46,11 +60,18 @@ export const useMessenger = () => {
 
     console.log('getting messenger')
 
+    // Signature pending text
+    const pendingMessage = 'We are connecting you to our messenger client'
+
     // Get the wallet's signer
     primaryWallet.connector
       .getSigner()
-      .then((signer) =>
-        Client.create({
+      .then((signer) => {
+        // Set signature pending
+        setPendingText(pendingMessage)
+
+        // return Client.create(wallet)
+        return Client.create({
           ...(signer as JsonRpcSigner),
           getAddress: (signer as JsonRpcSigner).getAddress,
           signMessage: (message) => {
@@ -58,10 +79,19 @@ export const useMessenger = () => {
             return (signer as JsonRpcSigner).signMessage(message)
           },
         })
-      )
-      .then(updateMessenger)
+      })
+      .then((newMessenger) => {
+        updateMessenger(newMessenger)
+
+        // Conclude signature
+        setPendingText((text: string) => (text === pendingMessage ? '' : text))
+      })
       .catch((error) => {
         console.log('failed to get messenger', error)
+        unlinkWallet()
+
+        // Cancel signature
+        setPendingText('')
       })
 
     // Execute cleanups

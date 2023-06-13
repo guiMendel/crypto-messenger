@@ -6,11 +6,20 @@ import reportWebVitals from './reportWebVitals'
 import { router } from './routes'
 import './style/main.scss'
 
+const dynamicCssOverride = `
+.dynamic-widget-inline-controls {
+  background: none;
+}
+`
+
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
     <DynamicContextProvider
-      settings={{ environmentId: 'b8318da7-07b5-47f9-9b40-ed48bc59d430' }}
+      settings={{
+        environmentId: 'b8318da7-07b5-47f9-9b40-ed48bc59d430',
+        cssOverrides: dynamicCssOverride,
+      }}
     >
       <RouterProvider router={router} />
     </DynamicContextProvider>

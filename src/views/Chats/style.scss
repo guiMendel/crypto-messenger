@@ -2,26 +2,26 @@
 
 #chats {
   display: flex;
+  flex-direction: column;
 
   width: 100%;
   min-height: 100vh;
 
   align-items: center;
-  // justify-content: center;
+  justify-content: center;
 
   main {
     display: flex;
     flex-direction: column;
 
-    // max-width: min(90%, 20rem);
-    max-width: 90%;
+    max-width: min(70%, 20rem);
 
     padding: 2rem 2rem;
 
     align-items: center;
     gap: 2rem;
 
-    background-color: $main-trans;
+    background-color: $background-trans;
     border-radius: $border-radius;
 
     box-shadow: 0 0 20px 1px $background-trans;
@@ -36,6 +36,8 @@
     }
 
     .no-chats {
+      max-width: 100%;
+      
       display: flex;
       flex-direction: column;
       align-items: center;
