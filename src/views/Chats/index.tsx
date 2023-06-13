@@ -1,13 +1,55 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FaPlus, FaSearch } from 'react-icons/fa'
+import { JSX } from 'react/jsx-runtime'
 import ChatPreview from '../../components/ChatPreview'
 import Profile from '../../components/Profile'
 import { useMessenger } from '../../modules/useMessenger'
 import { ReactComponent as EmptyPicture } from './empty.svg'
 import './style.scss'
 
+// Chat control options
+enum ChatOption {
+  Search,
+  New,
+}
+
+// Links options to icons
+const ControlsLinkTable: { [key in ChatOption]: JSX.Element } = {
+  [ChatOption.Search]: <FaSearch />,
+  [ChatOption.New]: <FaPlus />,
+}
+
 export default function Chats() {
+  // Consume chats for current user
   const { chats } = useMessenger()
+
+  // Which chat control option is selected
+  const [currentOption, setCurrentOption] = useState<null | ChatOption>(null)
+
+  // Focus on an input of the given control
+  const focusOn = (control: string) =>
+    (
+      document.querySelector(`.${control} input`) as HTMLInputElement | null
+    )?.focus()
+
+  // Sets the option from a string
+  const setOption = (value: string) => {
+    const parsedValue = parseInt(value)
+
+    if (currentOption == parsedValue) {
+      setCurrentOption(null)
+      return
+    }
+
+    setCurrentOption(parsedValue)
+
+    if (parsedValue == ChatOption.New) focusOn('new-chat')
+    else if (parsedValue == ChatOption.Search) focusOn('search-chats')
+  }
+
+  // Returns 'active' if the option is the provided one
+  const getClassForOption = (option: ChatOption) =>
+    currentOption != null && currentOption == option ? 'active' : ''
 
   useEffect(() => {
     console.log(chats)
@@ -21,26 +63,41 @@ export default function Chats() {
         <Profile />
 
         {/* Main controls */}
-        <div className="controls">
+        <div className="control-panel">
           {/* Options */}
           <div className="options">
-            {/* Search chats */}
-            <div className="option">
-              <FaSearch />
+            {Object.entries(ControlsLinkTable).map(([option, icon]) => (
+              <div
+                key={option}
+                className={`option ${
+                  parseInt(option) == currentOption ? 'selected' : ''
+                }`}
+                onClick={() => setOption(option)}
+              >
+                {icon}
+              </div>
+            ))}
+          </div>
+
+          <div className={`controls ${currentOption != null ? 'active' : ''}`}>
+            {/* Searchbar */}
+            <div
+              className={`control search-chats ${getClassForOption(
+                ChatOption.Search
+              )}`}
+            >
+              <input type="text" placeholder="Who to looking for?" />
             </div>
 
             {/* New chat */}
-            <div className="option">
-              <FaPlus />
+            <div
+              className={`control new-chat ${getClassForOption(
+                ChatOption.New
+              )}`}
+            >
+              <input type="text" placeholder="Type an address" />
             </div>
           </div>
-
-          {/* Searchbar */}
-          <input
-            className="search-chats"
-            type="text"
-            placeholder="Who to looking for?"
-          />
         </div>
 
         {chats.length == 0 ? (

@@ -26,7 +26,7 @@
 
     box-shadow: 0 0 20px 1px $background-trans;
 
-    .controls {
+    .control-panel {
       width: 100%;
 
       background-color: $background-trans;
@@ -35,7 +35,6 @@
 
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
       align-items: center;
 
       .options {
@@ -63,20 +62,57 @@
           &:hover {
             filter: brightness(1.3);
           }
+
+          &.selected {
+            background-color: $background-trans;
+          }
         }
       }
 
-      .search-chats {
-        width: 100%;
-        background-color: $background-trans;
-        border-radius: $border-radius;
-        padding: 0.6rem 1rem;
+      .controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
 
-        font-size: 0.9rem;
+        height: 2.5rem;
+        max-height: 0;
 
-        &::placeholder {
-          color: rgb(195, 195, 195);
-          font-weight: 200;
+        transition: all 300ms;
+
+        &.active {
+          max-height: 3rem;
+          margin-top: 0.5rem;
+        }
+
+        .control {
+          max-height: 0;
+          width: 100%;
+          opacity: 0;
+
+          overflow: hidden;
+          background-color: $background-trans;
+          border-radius: $border-radius;
+
+          font-size: 0.9rem;
+
+          transition: all 300ms;
+
+          &.active {
+            max-height: 3rem;
+            opacity: 1;
+          }
+
+          input {
+            background: none;
+            width: 100%;
+            padding: 0.6rem 1rem;
+
+            &::placeholder {
+              color: rgb(195, 195, 195);
+              font-weight: 200;
+            }
+          }
         }
       }
     }
