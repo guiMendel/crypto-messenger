@@ -3,7 +3,6 @@ import { JsonRpcSigner } from '@ethersproject/providers'
 import { Client, Conversation } from '@xmtp/xmtp-js'
 import { useContext, useEffect, useState } from 'react'
 import { SignaturePendingContext } from './SignaturePendingContext'
-import { Wallet } from 'ethers'
 
 // Useful to avoid  restarting the messenger for the same address
 let lastAddress = ''
@@ -20,14 +19,10 @@ export const useMessenger = () => {
   // ===================================
 
   // Get wallet from dynamic
-  const { primaryWallet, handleUnlinkWallet, handleLogOut } =
-    useDynamicContext()
+  const { primaryWallet, handleLogOut } = useDynamicContext()
 
   // Unlinks wallet
-  const logout = () =>
-    primaryWallet == undefined
-      ? null
-      : handleUnlinkWallet(primaryWallet.id).then(handleLogOut)
+  const logout = () => (primaryWallet == undefined ? null : handleLogOut())
 
   // The messenger interface
   const [, setMessenger] = useState<null | Client>(null)

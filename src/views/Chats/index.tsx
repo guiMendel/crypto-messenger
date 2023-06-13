@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { createContext, useRef, useState } from 'react'
 import { FaPlus, FaSearch } from 'react-icons/fa'
 import { JSX } from 'react/jsx-runtime'
-import ChatPreview from '../../components/ChatPreview'
 import Profile from '../../components/Profile'
-import { useMessenger } from '../../modules/useMessenger'
-import { ReactComponent as EmptyPicture } from './empty.svg'
 import './style.scss'
+import { Outlet, useNavigate } from 'react-router-dom'
+import { ControlInputContext } from '../../modules/ControlInputContext'
 
 // Chat control options
 enum ChatOption {
@@ -14,23 +13,38 @@ enum ChatOption {
 }
 
 // Links options to icons
-const ControlsLinkTable: { [key in ChatOption]: JSX.Element } = {
-  [ChatOption.Search]: <FaSearch />,
-  [ChatOption.New]: <FaPlus />,
+const controlsData: {
+  [key in ChatOption]: {
+    icon: JSX.Element
+    route: string
+    name: string
+    inputPlaceholder: string
+  }
+} = {
+  [ChatOption.Search]: {
+    icon: <FaSearch />,
+    name: 'search-chats',
+    route: '/',
+    inputPlaceholder: 'Who to search for',
+  },
+  [ChatOption.New]: {
+    icon: <FaPlus />,
+    name: 'new-chat',
+    route: '/new',
+    inputPlaceholder: 'Type an address',
+  },
 }
 
 export default function Chats() {
-  // Consume chats for current user
-  const { chats } = useMessenger()
-
   // Which chat control option is selected
   const [currentOption, setCurrentOption] = useState<null | ChatOption>(null)
 
-  // Focus on an input of the given control
-  const focusOn = (control: string) =>
-    (
-      document.querySelector(`.${control} input`) as HTMLInputElement | null
-    )?.focus()
+  // Get data for current option
+  const getOptionData = (option?: number) =>
+    controlsData[(option as unknown as ChatOption) ?? currentOption]
+
+  // Navigate route
+  const navigate = useNavigate()
 
   // Sets the option from a string
   const setOption = (value: string) => {
@@ -38,22 +52,29 @@ export default function Chats() {
 
     if (currentOption == parsedValue) {
       setCurrentOption(null)
+      navigate('/')
       return
     }
 
+    // Set the option
     setCurrentOption(parsedValue)
 
-    if (parsedValue == ChatOption.New) focusOn('new-chat')
-    else if (parsedValue == ChatOption.Search) focusOn('search-chats')
+    // Focus the input
+    inputRef.current?.focus()
+
+    // Navigate to the option's route
+    navigate(getOptionData(parsedValue).route)
   }
 
-  // Returns 'active' if the option is the provided one
-  const getClassForOption = (option: ChatOption) =>
-    currentOption != null && currentOption == option ? 'active' : ''
+  // =====================================
+  // === INPUT HANDLING
+  // =====================================
 
-  useEffect(() => {
-    console.log(chats)
-  }, [chats])
+  // State of the input
+  const [inputValue, setInputValue] = useState('')
+
+  // Ref to field
+  const inputRef = useRef<HTMLInputElement>(null)
 
   return (
     <div id="chats">
@@ -66,7 +87,7 @@ export default function Chats() {
         <div className="control-panel">
           {/* Options */}
           <div className="options">
-            {Object.entries(ControlsLinkTable).map(([option, icon]) => (
+            {Object.entries(controlsData).map(([option, { icon }]) => (
               <div
                 key={option}
                 className={`option ${
@@ -80,42 +101,22 @@ export default function Chats() {
           </div>
 
           <div className={`controls ${currentOption != null ? 'active' : ''}`}>
-            {/* Searchbar */}
-            <div
-              className={`control search-chats ${getClassForOption(
-                ChatOption.Search
-              )}`}
-            >
-              <input type="text" placeholder="Who to looking for?" />
-            </div>
-
-            {/* New chat */}
-            <div
-              className={`control new-chat ${getClassForOption(
-                ChatOption.New
-              )}`}
-            >
-              <input type="text" placeholder="Type an address" />
-            </div>
+            {/* Input text */}
+            <input
+              ref={inputRef}
+              type="text"
+              placeholder={getOptionData()?.inputPlaceholder}
+              value={inputValue}
+              onChange={({ target }) => setInputValue(target.value)}
+            />
           </div>
         </div>
 
-        {chats.length == 0 ? (
-          // No chat messages warning
-          <div className="no-chats">
-            <p>Looks like you haven't started any chats yet.</p>
-
-            <EmptyPicture />
-          </div>
-        ) : (
-          // Chat messages
-          <div className="chats">
-            {/* Chats */}
-            {chats.map((chat) => (
-              <ChatPreview chat={chat} key={chat.topic} />
-            ))}
-          </div>
-        )}
+        <ControlInputContext.Provider
+          value={{ input: inputValue, setInput: setInputValue }}
+        >
+          <Outlet />
+        </ControlInputContext.Provider>
       </main>
     </div>
   )

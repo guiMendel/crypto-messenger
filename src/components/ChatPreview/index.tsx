@@ -1,7 +1,7 @@
 import { Conversation } from '@xmtp/xmtp-js'
 import { useState } from 'react'
-import './style.scss'
 import ProfilePicture from '../ProfilePicture'
+import './style.scss'
 
 export default function ChatPreview({ chat }: { chat: Conversation }) {
   // Stores the latest message

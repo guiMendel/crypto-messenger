@@ -1,5 +1,7 @@
 import { Navigate, createBrowserRouter } from 'react-router-dom'
+import NewChat from '../components/NewChat'
 import RequireLogin from '../components/RequireLogin'
+import SearchChats from '../components/SearchChats'
 import Chats from '../views/Chats'
 import Login from '../views/Login'
 
@@ -14,6 +16,10 @@ export const router = createBrowserRouter([
       {
         path: '',
         element: <Chats />,
+        children: [
+          { path: '', element: <SearchChats /> },
+          { path: 'new', element: <NewChat /> },
+        ],
       },
     ],
   },
