@@ -1,8 +1,8 @@
 @import './normalize.css';
 @import './variables.scss';
+@import './dynamic.scss';
 
-@import url('https://fonts.googleapis.com/css2?family=Gajraj+One&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
-*,
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');*,
 *::before,
 *::after {
   margin: 0;
@@ -53,7 +53,6 @@ input[type='button'] {
 body {
   font-family: 'Titillium Web', 'Josefin Sans', 'Source Sans Pro', Helvetica, Arial,
     sans-serif;
-  font-size: 1.2rem;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -99,7 +98,7 @@ a {
 
 // Style heading
 h1 {
-  font-family: Pacifico, display;
+  font-family: 'Press Start 2P', display;
   font-size: 2.5rem;
 }
 
