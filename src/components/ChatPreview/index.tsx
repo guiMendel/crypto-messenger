@@ -5,21 +5,22 @@ import ProfilePicture from '../ProfilePicture'
 import './style.scss'
 
 export default function ChatPreview({ chat }: { chat: Chat }) {
-  // Stores the latest message
-  const [message, setMessage] = useState('Hey buddy')
-
   // Consume chats for current user
-  const { openChat, closeChat, getCurrentChatAddress } =
-    useContext(MessengerContext)
+  const { openChat, closeChat, selectedChat } = useContext(MessengerContext)
 
   // Handle clicking a chat
   const handleSelect = () => {
-    if (chat.peerAddress === getCurrentChatAddress()) closeChat()
+    if (chat.peerAddress === selectedChat) closeChat()
     else openChat(chat.peerAddress)
   }
 
   return (
-    <div className="chat-preview" onClick={handleSelect}>
+    <div
+      className={`chat-preview ${
+        chat.peerAddress === selectedChat && 'selected'
+      }`}
+      onClick={handleSelect}
+    >
       {/* Peer's picture */}
       <ProfilePicture address={chat.peerAddress} size={40} />
 
@@ -29,7 +30,7 @@ export default function ChatPreview({ chat }: { chat: Chat }) {
         <p>{chat.peerAddress}</p>
 
         {/* Latest message */}
-        <small>{message}</small>
+        {chat.latestMessage && <small>{chat.latestMessage}</small>}
       </div>
     </div>
   )

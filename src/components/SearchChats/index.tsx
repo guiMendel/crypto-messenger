@@ -9,7 +9,7 @@ export default function SearchChats() {
   const { chats } = useContext(MessengerContext)
 
   useEffect(() => {
-    console.log(chats)
+    console.log('chats', chats)
   }, [chats])
 
   if (Object.keys(chats).length == 0)

@@ -11,4 +11,8 @@
   box-sizing: border-box;
 
   @include preview;
+
+  &.selected {
+    background-color: $strong-trans;
+  }
 }

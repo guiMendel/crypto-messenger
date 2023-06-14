@@ -4,6 +4,7 @@ import RequireLogin from '../components/RequireLogin'
 import SearchChats from '../components/SearchChats'
 import Chats from '../views/Chats'
 import Login from '../views/Login'
+import Messenger from '../components/Messenger'
 
 export const router = createBrowserRouter([
   // Authenticated routes
@@ -15,7 +16,11 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '',
-        element: <Chats />,
+        element: (
+          <Messenger>
+            <Chats />
+          </Messenger>
+        ),
         children: [
           { path: '', element: <SearchChats /> },
           { path: 'new', element: <NewChat /> },

@@ -1,13 +1,12 @@
-import { useContext, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { FaArrowLeft, FaPlus, FaSearch } from 'react-icons/fa'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { JSX } from 'react/jsx-runtime'
 import Chat from '../../components/Chat'
-import Messenger from '../../components/Messenger'
 import Profile from '../../components/Profile'
 import { ControlInputContext } from '../../modules/ControlInputContext'
-import './style.scss'
 import { MessengerContext } from '../../modules/MessengerContext'
+import './style.scss'
 
 // Chat control options
 enum ChatOption {
@@ -44,7 +43,7 @@ export default function Chats() {
   // =====================================
 
   // Messenger actions
-  const { getCurrentChatAddress, closeChat } = useContext(MessengerContext)
+  const { selectedChat, closeChat } = useContext(MessengerContext)
 
   // =====================================
   // === CONTROL OPTIONS
@@ -96,73 +95,61 @@ export default function Chats() {
   }
 
   return (
-    <Messenger>
-      <div id="chats">
-        {/* Profile & Chat Select */}
-        <main
-          className={`main-menu ${
-            getCurrentChatAddress() != null ? 'hidden' : ''
-          }`}
-        >
-          {/* Profile */}
-          <Profile />
+    <div id="chats">
+      {/* Profile & Chat Select */}
+      <main className={`main-menu ${selectedChat != null ? 'hidden' : ''}`}>
+        {/* Profile */}
+        <Profile />
 
-          {/* Main controls */}
-          <div className="control-panel">
-            {/* Options */}
-            <div className="options">
-              {Object.entries(controlsData).map(([option, { icon }]) => (
-                <div
-                  key={option}
-                  className={`option ${
-                    parseInt(option) == currentOption ? 'selected' : ''
-                  }`}
-                  onClick={() => setOption(option)}
-                >
-                  {icon}
-                </div>
-              ))}
-            </div>
-
-            <div
-              className={`controls ${currentOption != null ? 'active' : ''}`}
-            >
-              {/* Input text */}
-              <input
-                ref={inputRef}
-                type="text"
-                placeholder={getOptionData()?.inputPlaceholder}
-                value={inputValue}
-                onChange={({ target }) => setInputValue(target.value)}
-              />
-            </div>
+        {/* Main controls */}
+        <div className="control-panel">
+          {/* Options */}
+          <div className="options">
+            {Object.entries(controlsData).map(([option, { icon }]) => (
+              <div
+                key={option}
+                className={`option ${
+                  parseInt(option) == currentOption ? 'selected' : ''
+                }`}
+                onClick={() => setOption(option)}
+              >
+                {icon}
+              </div>
+            ))}
           </div>
 
-          <ControlInputContext.Provider
-            value={{
-              input: inputValue,
-              setInput: setInputValue,
-              closeInput,
-            }}
-          >
-            <Outlet />
-          </ControlInputContext.Provider>
-        </main>
-
-        {/* Chat view */}
-        <div
-          className={`chat-view ${
-            getCurrentChatAddress() != null ? 'visible' : ''
-          }`}
-        >
-          {/* Back arrow */}
-          <div className="back" onClick={closeChat}>
-            <FaArrowLeft />
+          <div className={`controls ${currentOption != null ? 'active' : ''}`}>
+            {/* Input text */}
+            <input
+              ref={inputRef}
+              type="text"
+              placeholder={getOptionData()?.inputPlaceholder}
+              value={inputValue}
+              onChange={({ target }) => setInputValue(target.value)}
+            />
           </div>
-
-          <Chat isHidden={getCurrentChatAddress() == null} />
         </div>
+
+        <ControlInputContext.Provider
+          value={{
+            input: inputValue,
+            setInput: setInputValue,
+            closeInput,
+          }}
+        >
+          <Outlet />
+        </ControlInputContext.Provider>
+      </main>
+
+      {/* Chat view */}
+      <div className={`chat-view ${selectedChat != null ? 'visible' : ''}`}>
+        {/* Back arrow */}
+        <div className="back" onClick={closeChat}>
+          <FaArrowLeft />
+        </div>
+
+        <Chat isHidden={selectedChat == null} />
       </div>
-    </Messenger>
+    </div>
   )
 }

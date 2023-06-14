@@ -7,13 +7,13 @@ interface MessengerInterface {
   chats: { [address: string]: Chat }
   openChat: (address: string) => void
   closeChat: () => void
-  getCurrentChatAddress: () => null | string
+  selectedChat: null | string
 }
 
 export const MessengerContext = createContext<MessengerInterface>({
   chats: {},
   messenger: null,
-  getCurrentChatAddress: () => null,
+  selectedChat: null,
   openChat: (address) => {},
   closeChat: () => {},
 })

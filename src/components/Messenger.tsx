@@ -1,11 +1,13 @@
 import { useDynamicContext } from '@dynamic-labs/sdk-react'
 import { JsonRpcSigner } from '@ethersproject/providers'
-import { Client } from '@xmtp/xmtp-js'
+import { Client, DecodedMessage } from '@xmtp/xmtp-js'
 import React, { useContext, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { MessengerContext } from '../modules/MessengerContext'
 import { SignaturePendingContext } from '../modules/SignaturePendingContext'
-import conversationToChat from '../modules/conversationToChat'
+import conversationToChat, {
+  conversationsToChats,
+} from '../modules/conversationToChat'
 import Chat from '../types/Chat.interface'
 
 // Useful to avoid  restarting the messenger for the same address
@@ -71,8 +73,6 @@ export default function Messenger({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // If no wallet, no messenger
     if (primaryWallet == null) {
-      console.log('no wallet found')
-
       setMessenger(null)
       lastAddress = ''
       return
@@ -81,8 +81,6 @@ export default function Messenger({ children }: { children: React.ReactNode }) {
     // If wallet hasn't changed, ignore
     if (primaryWallet.address == lastAddress) return
     lastAddress = primaryWallet.address
-
-    console.log('getting messenger')
 
     // Signature pending text
     const pendingMessage = 'We are connecting you to our messenger client'
@@ -127,16 +125,11 @@ export default function Messenger({ children }: { children: React.ReactNode }) {
     // Initializes chats
     messenger.conversations
       .list()
-      .then((newConversations) => {
-        setChats((chats) => ({
-          ...chats,
-          ...Object.fromEntries(
-            Object.values(newConversations).map((conversation) => [
-              conversation.peerAddress,
-              conversationToChat(conversation),
-            ])
-          ),
-        }))
+      .then(async (newConversations) => {
+        // Turn them into chats
+        const newChats = await conversationsToChats(newConversations)
+
+        setChats((chats) => ({ ...chats, ...newChats }))
       })
       .catch((error) => {
         console.log('failed to initialize chats', error)
@@ -152,14 +145,17 @@ export default function Messenger({ children }: { children: React.ReactNode }) {
 
     // Stream new conversations for this user
     messenger.conversations
-      .stream()
-      .then(async (conversations) => {
+      .streamAllMessages()
+      .then(async (messageStream) => {
         while (true) {
           // Get new conversation
           const { value, done } = await Promise.race([
-            conversations.next(),
+            messageStream.next(),
             cleanupPromise,
           ])
+
+          // Get as message
+          const message = value as DecodedMessage
 
           // Stop if done
           if (done) return
@@ -167,7 +163,11 @@ export default function Messenger({ children }: { children: React.ReactNode }) {
           // Add the new conversation to the chats
           setChats((chats) => ({
             ...chats,
-            [value.peerAddress]: conversationToChat(value),
+            [message.senderAddress]: {
+              messages: [message],
+              peerAddress: message.senderAddress,
+              latestMessage: message.content,
+            },
           }))
         }
       })
@@ -185,18 +185,21 @@ export default function Messenger({ children }: { children: React.ReactNode }) {
   // Grab currently open chat address
   const [searchParams, setSearchParams] = useSearchParams()
 
+  // Get current chat
+  const [selectedChat, setSelectedChat] = useState<null | string>(null)
+
   // Open a chat
   const openChat = (address: string) => setSearchParams({ chat: address })
 
   // Close a chat
   const closeChat = () => setSearchParams({})
 
-  // Get current chat
-  const getCurrentChatAddress = () => searchParams.get('chat')
+  // Sync selected chat to url param
+  useEffect(() => setSelectedChat(searchParams.get('chat')), [searchParams])
 
   return (
     <MessengerContext.Provider
-      value={{ messenger, chats, openChat, closeChat, getCurrentChatAddress }}
+      value={{ messenger, chats, openChat, closeChat, selectedChat }}
     >
       {children}
     </MessengerContext.Provider>
