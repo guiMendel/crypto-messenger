@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import './style.scss'
 import { FaPaperPlane } from 'react-icons/fa'
+import { ChatContext } from '../../modules/ChatContext'
 
 export default function Chat({
   address,
@@ -9,6 +10,24 @@ export default function Chat({
   address?: string
   isHidden?: boolean
 }) {
+  // ==========================================
+  // === HOTKEYS
+  // ==========================================
+
+  // Consume chat actions
+  const { closeChat } = useContext(ChatContext)
+
+  useEffect(() => {
+    // Close on esc
+    const closeOnEsc = ({ key }: KeyboardEvent) => {
+      if (key == 'Escape') closeChat()
+    }
+
+    window.addEventListener('keyup', closeOnEsc)
+
+    return () => window.removeEventListener('keyup', closeOnEsc)
+  }, [])
+
   // ==========================================
   // === NEW MESSAGE
   // ==========================================

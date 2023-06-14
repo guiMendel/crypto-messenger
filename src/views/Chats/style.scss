@@ -2,7 +2,6 @@
 
 #chats {
   display: flex;
-  flex-direction: column;
 
   width: 100%;
   min-height: 100vh;
@@ -10,14 +9,15 @@
   align-items: center;
   justify-content: center;
 
-  overflow: hidden;
+  padding: 0 1rem;
 
+  overflow: hidden;
 
   .main-menu {
     display: flex;
     flex-direction: column;
 
-    max-width: min(90%, 20rem);
+    max-width: 20rem;
 
     padding: 2rem 2rem;
 
@@ -128,8 +128,10 @@
     }
 
     &.hidden {
-      transform: translate(4rem, 4rem);
-      opacity: 0;
+      @media (max-width: 768px) {
+        transform: translate(4rem, 4rem);
+        opacity: 0;
+      }
     }
   }
 
@@ -151,7 +153,7 @@
     transform: translate(4rem, 4rem);
     opacity: 0;
     pointer-events: none;
-    transition: all 400ms;
+    transition: all 400ms ease-out;
 
     .back {
       position: absolute;
@@ -179,6 +181,21 @@
       transform: translate(0, 0);
       opacity: 1;
       pointer-events: unset;
+    }
+
+    @media (min-width: 768px) {
+      position: relative;
+
+      max-height: 100vh;
+      max-width: 80vw;
+
+      .back {
+        display: none;
+      }
+
+      &:not(.visible) {
+        max-width: 0;
+      }
     }
   }
 }

@@ -96,7 +96,7 @@ button {
 
   // min-width: 5rem;
   // width: 100%;
-  
+
   text-align: center;
   align-items: center;
   justify-content: center;
@@ -136,4 +136,19 @@ em.highlight {
   font-style: normal;
 
   background-color: $bad-trans;
+}
+
+// Scrollbars
+
+::-webkit-scrollbar {
+  width: 0.8rem;
+}
+
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $background-trans;
+  border-radius: $border-radius;
 }
