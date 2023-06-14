@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import { FaArrowLeft, FaPlus, FaSearch } from 'react-icons/fa'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { JSX } from 'react/jsx-runtime'
 import Chat from '../../components/Chat'
 import Profile from '../../components/Profile'
@@ -59,13 +59,15 @@ export default function Chats() {
   // Navigate route
   const navigate = useNavigate()
 
+  const { search: queryParams } = useLocation()
+
   // Sets the option from a string
   const setOption = (value: string) => {
     const parsedValue = parseInt(value)
 
     if (currentOption == parsedValue) {
       setCurrentOption(null)
-      navigate('/')
+      navigate(`/${queryParams}`)
       return
     }
 
@@ -76,7 +78,7 @@ export default function Chats() {
     inputRef.current?.focus()
 
     // Navigate to the option's route
-    navigate(getOptionData(parsedValue).route)
+    navigate(getOptionData(parsedValue).route + queryParams)
   }
 
   // =====================================

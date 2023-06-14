@@ -15,26 +15,6 @@ let lastMessages: displayMessages = []
 
 export default function Chat({ address }: { address: string | null }) {
   // ==========================================
-  // === HOTKEYS
-  // ==========================================
-
-  // Consume chat actions
-  const { closeChat } = useContext(MessengerContext)
-
-  useEffect(() => {
-    const handleKey = ({ key, shiftKey }: KeyboardEvent) => {
-      // Close on esc
-      if (key == 'Escape') closeChat()
-      // Send on enter
-      else if (key == 'Enter' && shiftKey == false) sendMessage()
-    }
-
-    window.addEventListener('keyup', handleKey)
-
-    return () => window.removeEventListener('keyup', handleKey)
-  }, [])
-
-  // ==========================================
   // === NEW MESSAGE
   // ==========================================
 
@@ -54,10 +34,18 @@ export default function Chat({ address }: { address: string | null }) {
 
   // Send the message
   const sendMessage = () => {
-    if (message == '') return
+    let sent = false
 
-    chat?.send(message)
-    setMessage('')
+    setMessage((currentMessage) => {
+      if (sent) return ''
+      sent = true
+
+      console.log('sending', currentMessage)
+
+      if (currentMessage != '') chat?.send(currentMessage.trim())
+
+      return ''
+    })
   }
 
   // ==========================================
@@ -78,6 +66,11 @@ export default function Chat({ address }: { address: string | null }) {
       : Object.values(chat.messages)
           .sort(({ sent }) => -sent.getTime())
           .map((message) => ({ ...message, type: getSenderType(message) })))
+
+  // useEffect(
+  //   () => console.log('new chat:', messages[messages.length - 1]),
+  //   [chat]
+  // )
 
   // ==========================================
   // === INBOX
@@ -111,6 +104,40 @@ export default function Chat({ address }: { address: string | null }) {
       sent.getHours()
     )}:${pad(sent.getMinutes())}`
   }
+
+  // ==========================================
+  // === HOTKEYS
+  // ==========================================
+
+  // Consume chat actions
+  const { closeChat } = useContext(MessengerContext)
+
+  useEffect(() => {
+    const closeOnEsc = ({ key }: KeyboardEvent) => {
+      // Close on esc
+      if (key == 'Escape') closeChat()
+    }
+
+    window.addEventListener('keyup', closeOnEsc)
+
+    return () => window.removeEventListener('keyup', closeOnEsc)
+  }, [chat])
+
+  useEffect(() => {
+    if (inputRef.current == undefined) return
+
+    const sendOnEnter = ({ key, shiftKey, preventDefault }: KeyboardEvent) => {
+      // Send on enter
+      if (key == 'Enter' && shiftKey == false) {
+        sendMessage()
+        adjustFieldHeight()
+      }
+    }
+
+    inputRef.current.addEventListener('keyup', sendOnEnter)
+
+    return () => inputRef.current?.removeEventListener('keyup', sendOnEnter)
+  }, [inputRef])
 
   return (
     <div id="chat">

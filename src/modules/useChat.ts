@@ -74,7 +74,7 @@ export default function useChat(address: string | null) {
             cleanupPromise,
           ])
 
-          console.log('stream in:', value, done)
+          console.log('stream in:', (value as any)?.content, done)
 
           // Stop if done
           if (done) break
