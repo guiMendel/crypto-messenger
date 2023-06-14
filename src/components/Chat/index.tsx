@@ -10,9 +10,6 @@ type displayMessages = (Omit<DecodedMessage, 'toBytes'> & {
   type: 'incoming' | 'outgoing'
 })[]
 
-// Hold last messages for animation sake
-let lastMessages: displayMessages = []
-
 export default function Chat({ address }: { address: string | null }) {
   // ==========================================
   // === NEW MESSAGE
@@ -61,16 +58,16 @@ export default function Chat({ address }: { address: string | null }) {
     message.senderAddress === address ? 'incoming' : 'outgoing'
 
   // Store sorted messages
-  const messages: displayMessages = (lastMessages =
+  const messages: displayMessages =
     address == null || chat == null
-      ? lastMessages
+      ? []
       : Object.values(chat.messages)
           .sort(({ sent: sentA }, { sent: sentB }) => {
             if (sentA > sentB) return 1
             if (sentA === sentB) return 0
             return -1
           })
-          .map((message) => ({ ...message, type: getSenderType(message) })))
+          .map((message) => ({ ...message, type: getSenderType(message) }))
 
   // useEffect(
   //   () => console.log('new chat:', chat),

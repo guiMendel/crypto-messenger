@@ -18,9 +18,12 @@ export default function useChat(address: string | null) {
   const [messages, setMessages] = useState<Chat['messages']>({})
 
   // Set messages from array
-  const setMessagesFromArray = (newMessages: DecodedMessage[]) =>
+  const setMessagesFromArray = (
+    newMessages: DecodedMessage[],
+    override = false
+  ) =>
     setMessages((messages) => ({
-      ...messages,
+      ...(override ? {} : messages),
       ...Object.fromEntries(
         newMessages.map((message) => [message.id, message])
       ),
@@ -63,7 +66,7 @@ export default function useChat(address: string | null) {
       })
       .then((newMessages) => {
         // Add them
-        setMessagesFromArray(newMessages)
+        setMessagesFromArray(newMessages, true)
 
         // Start streaming new messages
         return conversation.streamMessages()
@@ -86,6 +89,7 @@ export default function useChat(address: string | null) {
         //   console.log('stream in:', message.content)
         // }
 
+        // Get any cached messages
         setMessagesFromArray(messageStream.messages)
 
         while (true) {
