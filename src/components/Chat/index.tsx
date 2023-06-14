@@ -1,8 +1,10 @@
+import { Conversation, DecodedMessage } from '@xmtp/xmtp-js'
 import { useContext, useEffect, useRef, useState } from 'react'
-import './style.scss'
 import { FaPaperPlane } from 'react-icons/fa'
-import { ChatContext } from '../../modules/ChatContext'
+import { MessengerContext } from '../../modules/MessengerContext'
 import ProfilePicture from '../ProfilePicture'
+import './style.scss'
+import useChat from '../../modules/useChat'
 
 export default function Chat({
   address,
@@ -16,7 +18,7 @@ export default function Chat({
   // ==========================================
 
   // Consume chat actions
-  const { closeChat } = useContext(ChatContext)
+  const { closeChat } = useContext(MessengerContext)
 
   useEffect(() => {
     // Close on esc
@@ -48,7 +50,18 @@ export default function Chat({
   const [message, setMessage] = useState('')
 
   // ==========================================
-  // === MESSAGE INDEX
+  // === CHAT SYNC
+  // ==========================================
+
+  // Syncs the chat to the current address
+  const chat = useChat(address)
+
+  // Converts a message into either 'incoming' or 'outgoing'
+  const getSenderType = (message: DecodedMessage): 'incoming' | 'outgoing' =>
+    message.senderAddress === address ? 'outgoing' : 'incoming'
+
+  // ==========================================
+  // === INBOX
   // ==========================================
 
   // Ref of message scroller
@@ -66,34 +79,44 @@ export default function Chat({
   return (
     <div id="chat">
       {/* Peer info */}
-      <div className="peer">
-        {/* Picture */}
-        <ProfilePicture size={40} address="0xb715fC7e6CB5dF408b86E68F9F99C4D4733b139A" />
+      {address && (
+        <div className="peer">
+          {/* Picture */}
+          <ProfilePicture size={40} address={address} />
 
-        {/* Address */}
-        <small>0xb715fC7e6CB5dF408b86E68F9F99C4D4733b139A</small>
-      </div>
+          {/* Address */}
+          <small>{address}</small>
+        </div>
+      )}
 
       {/* Messages */}
       <div className="message-scroller" ref={messageScrollerRef}>
-        <div className="messages">
-          <p className="incoming">Sup brah</p>
-          <p className="incoming">Wyd</p>
-          <p className="outgoing">not much</p>
-          <p className="outgoing">u?</p>
-          <p className="incoming">Just checking ya out</p>
-          <p className="outgoing">ok</p>
-          <p className="incoming">What</p>
-          <p className="outgoing">what what</p>
-          <p className="incoming">Did you catch last week's episode?</p>
-          <p className="outgoing">bad batch?</p>
-          <p className="outgoing">hell yeah man. Love wrecker</p>
-          <p className="incoming">Don't get too attached to Tech though</p>
-          <p className="incoming">Just sayin</p>
-          <p className="outgoing">dude come the fuck on</p>
-          <p className="outgoing">are u srs right now</p>
-          <p className="incoming">Lol</p>
-        </div>
+        {chat && (
+          <div className="messages">
+            {chat.messages.map((message) => (
+              <p key={message.id} className={getSenderType(message)}>
+                {message.content}
+              </p>
+            ))}
+            {/* 
+            <p className="incoming">Sup brah</p>
+            <p className="incoming">Wyd</p>
+            <p className="outgoing">not much</p>
+            <p className="outgoing">u?</p>
+            <p className="incoming">Just checking ya out</p>
+            <p className="outgoing">ok</p>
+            <p className="incoming">What</p>
+            <p className="outgoing">what what</p>
+            <p className="incoming">Did you catch last week's episode?</p>
+            <p className="outgoing">bad batch?</p>
+            <p className="outgoing">hell yeah man. Love wrecker</p>
+            <p className="incoming">Don't get too attached to Tech though</p>
+            <p className="incoming">Just sayin</p>
+            <p className="outgoing">dude come the fuck on</p>
+            <p className="outgoing">are u srs right now</p>
+            <p className="incoming">Lol</p> */}
+          </div>
+        )}
       </div>
 
       {/* Input panel */}

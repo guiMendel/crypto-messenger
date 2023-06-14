@@ -5,14 +5,14 @@ import { ControlInputContext } from '../../modules/ControlInputContext'
 import '../ChatPreview/style.scss'
 import ProfilePicture from '../ProfilePicture'
 import './style.scss'
-import { ChatContext } from '../../modules/ChatContext'
+import { MessengerContext } from '../../modules/MessengerContext'
 
 export default function NewChat() {
   // Consume input
   const { input, closeInput } = useContext(ControlInputContext)
 
   // Consume chat control
-  const { openChat } = useContext(ChatContext)
+  const { openChat } = useContext(MessengerContext)
 
   // Validate input
   const isValid = /^0x[a-fA-F0-9]{40}$/g.test(input)

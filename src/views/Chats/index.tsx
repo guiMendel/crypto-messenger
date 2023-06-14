@@ -1,14 +1,13 @@
-import { useRef, useState } from 'react'
-import { FaPlus, FaSearch } from 'react-icons/fa'
-import { Outlet, useNavigate, useSearchParams } from 'react-router-dom'
+import { useContext, useRef, useState } from 'react'
+import { FaArrowLeft, FaPlus, FaSearch } from 'react-icons/fa'
+import { Outlet, useNavigate } from 'react-router-dom'
 import { JSX } from 'react/jsx-runtime'
 import Chat from '../../components/Chat'
+import Messenger from '../../components/Messenger'
 import Profile from '../../components/Profile'
 import { ControlInputContext } from '../../modules/ControlInputContext'
 import './style.scss'
-import { useMessenger } from '../../modules/useMessenger'
-import { ChatContext } from '../../modules/ChatContext'
-import { FaArrowLeft } from 'react-icons/fa'
+import { MessengerContext } from '../../modules/MessengerContext'
 
 // Chat control options
 enum ChatOption {
@@ -41,23 +40,11 @@ const controlsData: {
 
 export default function Chats() {
   // =====================================
-  // === CHAT HANDLING
+  // === CONTROL OPTIONS
   // =====================================
 
-  // Grabs all chats
-  const { chats } = useMessenger()
-
-  // Grab currently open chat address
-  const [searchParams, setSearchParams] = useSearchParams()
-
-  // Open a chat
-  const openChat = (address: string) => setSearchParams({ chat: address })
-
-  // Close a chat
-  const closeChat = () => setSearchParams({})
-
-  // Get current chat
-  const getCurrentChatAddress = () => searchParams.get('chat')
+  // Messenger actions
+  const { getCurrentChatAddress, closeChat } = useContext(MessengerContext)
 
   // =====================================
   // === CONTROL OPTIONS
@@ -109,9 +96,7 @@ export default function Chats() {
   }
 
   return (
-    <ChatContext.Provider
-      value={{ chats, openChat, closeChat, getCurrentChatAddress }}
-    >
+    <Messenger>
       <div id="chats">
         {/* Profile & Chat Select */}
         <main
@@ -178,6 +163,6 @@ export default function Chats() {
           <Chat isHidden={getCurrentChatAddress() == null} />
         </div>
       </div>
-    </ChatContext.Provider>
+    </Messenger>
   )
 }

@@ -1,9 +1,9 @@
-import './style.scss'
+import { useDynamicContext } from '@dynamic-labs/sdk-react'
 import { ReactComponent as PendingAnimation } from './pending.svg'
-import { useMessenger } from '../../modules/useMessenger'
+import './style.scss'
 
 export default function SignaturePending({ text }: { text: string }) {
-  const { logout } = useMessenger()
+  const { handleLogOut } = useDynamicContext()
 
   if (text == '') return null
 
@@ -20,7 +20,7 @@ export default function SignaturePending({ text }: { text: string }) {
         <p>{text}...</p>
 
         {/* Log out button */}
-        <button onClick={logout}>Sign out</button>
+        <button onClick={handleLogOut}>Sign out</button>
       </div>
     </div>
   )
