@@ -66,6 +66,7 @@ export default function Chats() {
     const parsedValue = parseInt(value)
 
     if (currentOption == parsedValue) {
+      setInputValue('')
       setCurrentOption(null)
       navigate(`/${queryParams}`)
       return
