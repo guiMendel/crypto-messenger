@@ -25,6 +25,8 @@ export default function useChat(address: string | null) {
       return
     }
 
+    console.log('initializign')
+
     messenger.conversations
       // Fetch new conversation
       .newConversation(address)

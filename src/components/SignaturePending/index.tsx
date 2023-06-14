@@ -1,11 +1,19 @@
 import { useDynamicContext } from '@dynamic-labs/sdk-react'
 import { ReactComponent as PendingAnimation } from './pending.svg'
 import './style.scss'
+import { useContext } from 'react'
+import { SignaturePendingContext } from '../../modules/SignaturePendingContext'
 
-export default function SignaturePending({ text }: { text: string }) {
+export default function SignaturePending() {
   const { handleLogOut } = useDynamicContext()
+  const { pendingText, setPendingText } = useContext(SignaturePendingContext)
 
-  if (text == '') return null
+  const logout = () => {
+    setPendingText('')
+    handleLogOut()
+  }
+
+  if (pendingText == '') return null
 
   return (
     <div id="signature-pending">
@@ -17,10 +25,10 @@ export default function SignaturePending({ text }: { text: string }) {
         <h2>Signature Requested</h2>
 
         {/* Text */}
-        <p>{text}...</p>
+        <p>{pendingText}...</p>
 
         {/* Log out button */}
-        <button onClick={handleLogOut}>Sign out</button>
+        <button onClick={logout}>Sign out</button>
       </div>
     </div>
   )

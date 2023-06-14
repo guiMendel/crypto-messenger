@@ -28,7 +28,7 @@ export default function RequireLogin({
   // Show content and provide signature context
   return (
     <SignaturePendingContext.Provider value={signaturePending}>
-      <SignaturePending text={pendingText} />
+      <SignaturePending />
       <Outlet />
     </SignaturePendingContext.Provider>
   )

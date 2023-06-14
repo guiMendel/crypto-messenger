@@ -10,9 +10,6 @@ import conversationToChat, {
 } from '../modules/conversationToChat'
 import Chat from '../types/Chat.interface'
 
-// Useful to avoid  restarting the messenger for the same address
-let lastAddress = ''
-
 // // List of cleanup callbacks attached to a new messenger update
 // const messengerCleanups: (() => void)[] = []
 
@@ -33,7 +30,7 @@ export default function Messenger({ children }: { children: React.ReactNode }) {
   // ===================================
 
   // Get wallet from dynamic
-  const { primaryWallet, handleLogOut } = useDynamicContext()
+  const { primaryWallet, handleLogOut, isAuthenticated } = useDynamicContext()
 
   // Unlinks wallet
   const logout = () => (primaryWallet == undefined ? null : handleLogOut())
@@ -74,13 +71,11 @@ export default function Messenger({ children }: { children: React.ReactNode }) {
     // If no wallet, no messenger
     if (primaryWallet == null) {
       setMessenger(null)
-      lastAddress = ''
       return
     }
 
-    // If wallet hasn't changed, ignore
-    if (primaryWallet.address == lastAddress) return
-    lastAddress = primaryWallet.address
+    // If messenger already has this address, ignore
+    if (primaryWallet.address == messenger?.address) return
 
     // Signature pending text
     const pendingMessage = 'We are connecting you to our messenger client'

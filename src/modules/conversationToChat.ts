@@ -27,8 +27,6 @@ export async function conversationToChatInitialize(
   // Get one message for it
   const newMessages = await conversation.messages({ limit: 1 })
 
-  console.log('initialized with', newMessages)
-
   // Include this message
   if (newMessages.length > 0) {
     const [newMessage] = newMessages
