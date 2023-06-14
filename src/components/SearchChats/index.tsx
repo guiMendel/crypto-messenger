@@ -8,10 +8,6 @@ export default function SearchChats() {
   // Consume chats for current user
   const { chats } = useContext(MessengerContext)
 
-  useEffect(() => {
-    console.log('chats', chats)
-  }, [chats])
-
   if (Object.keys(chats).length == 0)
     return (
       <div className="no-chats">

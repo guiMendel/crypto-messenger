@@ -5,9 +5,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { MessengerContext } from '../modules/MessengerContext'
 import { SignaturePendingContext } from '../modules/SignaturePendingContext'
-import conversationToChat, {
-  conversationsToChats,
-} from '../modules/conversationToChat'
+import { conversationsToChats } from '../modules/conversationToChat'
 import Chat from '../types/Chat.interface'
 
 // // List of cleanup callbacks attached to a new messenger update
@@ -87,7 +85,12 @@ export default function Messenger({ children }: { children: React.ReactNode }) {
         // Set signature pending
         setPendingText(pendingMessage)
 
-        return Client.create(signer as JsonRpcSigner)
+        const environment =
+          !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
+            ? 'dev'
+            : 'production'
+
+        return Client.create(signer as JsonRpcSigner, { env: environment })
       })
       .then((newMessenger) => {
         setMessenger(newMessenger)
