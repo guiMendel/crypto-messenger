@@ -4,19 +4,7 @@ import { DecodedMessage } from '@xmtp/xmtp-js'
 import userEvent from '@testing-library/user-event'
 import react from 'react'
 
-// jest.mock('@xmtp/xmtp-js', () => {
-//   return {
-//     DecodedMessage: jest.fn().mockImplementation(() => {
-//       return {
-//         content: 'test',
-//       }
-//     }),
-//   }
-// })
-
 describe('ChatPreview UX', () => {
-  // const MockedEncodedMessage = jest.mocked(DecodedMessage, { shallow: true })
-
   it('should display peer address and latest message', () => {
     const peerAddress = '0xrandomaddress'
     const latestMessage = {
@@ -41,16 +29,13 @@ describe('ChatPreview UX', () => {
 
     // Mock use context
     const openChat = jest.fn()
-
     const closeChat = jest.fn()
 
-    const messengerData = {
+    react.useContext = jest.fn().mockImplementation(() => ({
       openChat,
       closeChat,
-      selectedChat: '0xSomeone',
-    }
-
-    react.useContext = jest.fn().mockImplementation(() => messengerData)
+      selectedChat: '0xSomeoneElse',
+    }))
 
     const layout = render(
       <ChatPreview
@@ -74,16 +59,13 @@ describe('ChatPreview UX', () => {
 
     // Mock use context
     const openChat = jest.fn()
-
     const closeChat = jest.fn()
 
-    const messengerData = {
+    react.useContext = jest.fn().mockImplementation(() => ({
       openChat,
       closeChat,
       selectedChat: peerAddress,
-    }
-
-    react.useContext = jest.fn().mockImplementation(() => messengerData)
+    }))
 
     const layout = render(
       <ChatPreview
