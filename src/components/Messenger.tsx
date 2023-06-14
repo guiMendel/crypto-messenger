@@ -85,12 +85,12 @@ export default function Messenger({ children }: { children: React.ReactNode }) {
         // Set signature pending
         setPendingText(pendingMessage)
 
-        const environment =
-          !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
-            ? 'dev'
-            : 'production'
+        // const environment =
+        //   !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
+        //     ? 'dev'
+        //     : 'production'
 
-        return Client.create(signer as JsonRpcSigner, { env: environment })
+        return Client.create(signer as JsonRpcSigner)
       })
       .then((newMessenger) => {
         setMessenger(newMessenger)
