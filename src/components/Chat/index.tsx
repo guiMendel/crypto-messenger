@@ -22,14 +22,16 @@ export default function Chat({ address }: { address: string | null }) {
   const { closeChat } = useContext(MessengerContext)
 
   useEffect(() => {
-    // Close on esc
-    const closeOnEsc = ({ key }: KeyboardEvent) => {
+    const handleKey = ({ key, shiftKey }: KeyboardEvent) => {
+      // Close on esc
       if (key == 'Escape') closeChat()
+      // Send on enter
+      else if (key == 'Enter' && shiftKey == false) sendMessage()
     }
 
-    window.addEventListener('keyup', closeOnEsc)
+    window.addEventListener('keyup', handleKey)
 
-    return () => window.removeEventListener('keyup', closeOnEsc)
+    return () => window.removeEventListener('keyup', handleKey)
   }, [])
 
   // ==========================================
@@ -50,6 +52,14 @@ export default function Chat({ address }: { address: string | null }) {
   // Message content
   const [message, setMessage] = useState('')
 
+  // Send the message
+  const sendMessage = () => {
+    if (message == '') return
+
+    chat?.send(message)
+    setMessage('')
+  }
+
   // ==========================================
   // === CHAT SYNC
   // ==========================================
@@ -66,7 +76,7 @@ export default function Chat({ address }: { address: string | null }) {
     address == null || chat == null
       ? lastMessages
       : Object.values(chat.messages)
-          .sort(({ sent }) => sent.getTime())
+          .sort(({ sent }) => -sent.getTime())
           .map((message) => ({ ...message, type: getSenderType(message) })))
 
   // ==========================================
@@ -128,23 +138,6 @@ export default function Chat({ address }: { address: string | null }) {
                 <small>{getTimestamp(message)}</small>
               </div>
             ))}
-            {/*
-      <p className="incoming">Sup brah</p>
-      <p className="incoming">Wyd</p>
-      <p className="outgoing">not much</p>
-      <p className="outgoing">u?</p>
-      <p className="incoming">Just checking ya out</p>
-      <p className="outgoing">ok</p>
-      <p className="incoming">What</p>
-      <p className="outgoing">what what</p>
-      <p className="incoming">Did you catch last week's episode?</p>
-      <p className="outgoing">bad batch?</p>
-      <p className="outgoing">hell yeah man. Love wrecker</p>
-      <p className="incoming">Don't get too attached to Tech though</p>
-      <p className="incoming">Just sayin</p>
-      <p className="outgoing">dude come the fuck on</p>
-      <p className="outgoing">are u srs right now</p>
-      <p className="incoming">Lol</p> */}
           </div>
         )}
       </div>
@@ -161,7 +154,7 @@ export default function Chat({ address }: { address: string | null }) {
         />
 
         {/* Send button */}
-        <span className="send">
+        <span className="send" onClick={sendMessage}>
           <FaPaperPlane />
         </span>
       </div>

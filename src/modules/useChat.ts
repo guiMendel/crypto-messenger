@@ -1,4 +1,4 @@
-import { Conversation, DecodedMessage } from '@xmtp/xmtp-js'
+import { Conversation, DecodedMessage, SortDirection } from '@xmtp/xmtp-js'
 import { useContext, useEffect, useState } from 'react'
 import { MessengerContext } from './MessengerContext'
 import conversationToChat from './conversationToChat'
@@ -25,8 +25,6 @@ export default function useChat(address: string | null) {
       return
     }
 
-    console.log('initializign')
-
     messenger.conversations
       // Fetch new conversation
       .newConversation(address)
@@ -34,7 +32,7 @@ export default function useChat(address: string | null) {
       .then(setConversation)
       // Reset if error found
       .catch(() => setConversation(null))
-  }, [messenger])
+  }, [messenger, address])
 
   // Sync conversation messages
   useEffect(() => {
@@ -50,7 +48,10 @@ export default function useChat(address: string | null) {
 
     conversation
       // Fetch first few messages
-      .messages({ limit: initialMessageCount })
+      .messages({
+        limit: initialMessageCount,
+        direction: SortDirection.SORT_DIRECTION_DESCENDING,
+      })
       .then((newMessages) => {
         // Add them
         setMessages((messages) => ({
@@ -64,6 +65,8 @@ export default function useChat(address: string | null) {
         return conversation.streamMessages()
       })
       .then(async (messageStream) => {
+        console.log('streaming new messages')
+
         while (true) {
           // Get new message
           const { value, done } = await Promise.race([
@@ -71,8 +74,10 @@ export default function useChat(address: string | null) {
             cleanupPromise,
           ])
 
+          console.log('stream in:', value, done)
+
           // Stop if done
-          if (done) return
+          if (done) break
 
           // Get as message
           const message = value as DecodedMessage
@@ -80,6 +85,8 @@ export default function useChat(address: string | null) {
           // Add the new message
           setMessages((messages) => ({ ...messages, [message.id]: message }))
         }
+
+        console.log('FINISH streaming new messages')
       })
       .catch((error) => console.log('failed to stream messages', error))
 

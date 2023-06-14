@@ -1,4 +1,4 @@
-import { Conversation, DecodedMessage } from '@xmtp/xmtp-js'
+import { Conversation, DecodedMessage, SortDirection } from '@xmtp/xmtp-js'
 import Chat from '../types/Chat.interface'
 
 // Turns conversation to chat
@@ -14,6 +14,7 @@ export default function conversationToChat(
     )[0]
 
   return {
+    send: (message) => conversation.send(message),
     messages: messages ?? {},
     peerAddress: conversation.peerAddress,
     latestMessage,
@@ -25,7 +26,10 @@ export async function conversationToChatInitialize(
   messages?: Chat['messages']
 ): Promise<Chat> {
   // Get one message for it
-  const newMessages = await conversation.messages({ limit: 1 })
+  const newMessages = await conversation.messages({
+    limit: 1,
+    direction: SortDirection.SORT_DIRECTION_DESCENDING,
+  })
 
   // Include this message
   if (newMessages.length > 0) {

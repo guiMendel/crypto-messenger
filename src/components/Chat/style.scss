@@ -98,7 +98,7 @@
           display: flex;
           align-items: center;
           gap: 0.2rem;
-          
+
           font-weight: 200;
           color: rgba(255, 255, 255, 0.5);
         }
@@ -150,7 +150,7 @@
 
     textarea {
       width: 100%;
-      
+
       min-height: 3rem;
       max-height: 80vh;
 
@@ -174,8 +174,19 @@
     .send {
       position: absolute;
 
+      cursor: pointer;
+
       right: 1rem;
       font-size: 1.5rem;
+
+      user-select: none;
+
+      transition: all 100ms;
+
+      &:hover {
+        translate: 0 -0.1rem;
+        color: $good;
+      }
     }
   }
 }

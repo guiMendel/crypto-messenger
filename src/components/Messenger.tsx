@@ -162,6 +162,7 @@ export default function Messenger({ children }: { children: React.ReactNode }) {
               messages: { [message.id]: message },
               peerAddress: message.senderAddress,
               latestMessage: message,
+              send: (targetMessage) => message.conversation.send(targetMessage),
             },
           }))
         }
