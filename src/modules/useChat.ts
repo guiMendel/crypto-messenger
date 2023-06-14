@@ -65,7 +65,22 @@ export default function useChat(address: string | null) {
         return conversation.streamMessages()
       })
       .then(async (messageStream) => {
-        console.log('streaming new messages')
+        console.log('streaming new messages for', conversation.peerAddress)
+
+        // let stop = false
+
+        // cleanupPromise.then(() => {
+        //   stop = true
+        //   console.log('stream REQUEST STOP')
+        // })
+
+        // for await (const message of messageStream) {
+        //   if (stop) break
+
+        //   setMessages((messages) => ({ ...messages, [message.id]: message }))
+
+        //   console.log('stream in:', message.content)
+        // }
 
         while (true) {
           // Get new message

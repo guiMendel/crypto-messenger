@@ -40,9 +40,10 @@ export default function Chat({ address }: { address: string | null }) {
       if (sent) return ''
       sent = true
 
-      console.log('sending', currentMessage)
-
-      if (currentMessage != '') chat?.send(currentMessage.trim())
+      if (currentMessage.trim() != '')
+        chat
+          ?.send(currentMessage.trim())
+          .then(({ content }) => console.log('SENT', content))
 
       return ''
     })
@@ -64,11 +65,18 @@ export default function Chat({ address }: { address: string | null }) {
     address == null || chat == null
       ? lastMessages
       : Object.values(chat.messages)
-          .sort(({ sent }) => -sent.getTime())
+          .sort(({ sent: sentA }, { sent: sentB }) => {
+            if (sentA > sentB) return 1
+            if (sentA === sentB) return 0
+            return -1
+          })
           .map((message) => ({ ...message, type: getSenderType(message) })))
 
+  console.log(messages.map(({ sent }) => sent.getTime()))
+
   // useEffect(
-  //   () => console.log('new chat:', messages[messages.length - 1]),
+  //   () => console.log('new chat:', chat),
+  //   // () => console.log('new chat:', messages[messages.length - 1]),
   //   [chat]
   // )
 
@@ -109,6 +117,9 @@ export default function Chat({ address }: { address: string | null }) {
   // === HOTKEYS
   // ==========================================
 
+  // Input send ref
+  const sendRef = useRef<HTMLSpanElement>(null)
+
   // Consume chat actions
   const { closeChat } = useContext(MessengerContext)
 
@@ -126,10 +137,10 @@ export default function Chat({ address }: { address: string | null }) {
   useEffect(() => {
     if (inputRef.current == undefined) return
 
-    const sendOnEnter = ({ key, shiftKey, preventDefault }: KeyboardEvent) => {
+    const sendOnEnter = ({ key, shiftKey, target }: KeyboardEvent) => {
       // Send on enter
       if (key == 'Enter' && shiftKey == false) {
-        sendMessage()
+        sendRef.current?.click()
         adjustFieldHeight()
       }
     }
@@ -181,7 +192,7 @@ export default function Chat({ address }: { address: string | null }) {
         />
 
         {/* Send button */}
-        <span className="send" onClick={sendMessage}>
+        <span ref={sendRef} className="send" onClick={sendMessage}>
           <FaPaperPlane />
         </span>
       </div>
