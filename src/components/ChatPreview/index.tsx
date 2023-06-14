@@ -5,7 +5,6 @@ import Chat from '../../types/Chat.interface'
 import ProfilePicture from '../ProfilePicture'
 import './style.scss'
 
-
 export default function ChatPreview({ chat }: { chat: Chat }) {
   // Consume chats for current user
   const { openChat, closeChat, selectedChat } = useContext(MessengerContext)
@@ -29,7 +28,11 @@ export default function ChatPreview({ chat }: { chat: Chat }) {
       {/* Conversation details */}
       <div className="text">
         {/* Name */}
-        <p>{chat.peerAddress}</p>
+        <div className="address">
+          {/* First 3 letters */}
+          <p className="prefix">{chat.peerAddress.slice(0, 3)}</p>
+          <p>{chat.peerAddress.slice(3)}</p>
+        </div>
 
         {/* Latest message */}
         {chat.latestMessage && (

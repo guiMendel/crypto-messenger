@@ -16,6 +16,10 @@
     background-color: $strong-trans;
   }
 
+  .address {
+    @include crop-address;
+  }
+
   small {
     display: flex;
     align-items: center;

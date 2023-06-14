@@ -83,10 +83,10 @@ $border-radius: 20px;
       font-weight: 600;
       max-width: 100%;
 
-      // word-wrap: break-word;
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
+      text-align: left;
 
       margin: 0;
     }
@@ -101,5 +101,23 @@ $border-radius: 20px;
 
   &:hover {
     filter: brightness(1.1);
+  }
+}
+
+@mixin crop-address {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  .prefix {
+    min-width: max-content;
+  }
+
+  p {
+    direction: rtl;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: left;
   }
 }

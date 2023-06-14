@@ -38,6 +38,8 @@
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
+
+      @include crop-address;
     }
   }
 

@@ -154,7 +154,10 @@ export default function Chat({ address }: { address: string | null }) {
           <ProfilePicture size={40} address={address} />
 
           {/* Address */}
-          <small>{address}</small>
+          <small className="address">
+            <p className="prefix">{address.slice(0, 3)}</p>
+            <p>{address.slice(3)}</p>
+          </small>
         </div>
       )}
 

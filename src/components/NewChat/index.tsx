@@ -57,7 +57,10 @@ export default function NewChat() {
       {/* Conversation details */}
       <div className="text">
         {/* Address */}
-        <p>{input}</p>
+        <div className="address">
+          <p className="prefix">{input.slice(0, 3)}</p>
+          <p>{input.slice(3)}</p>
+        </div>
 
         <small>Start conversation</small>
       </div>
