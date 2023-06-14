@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import './style.scss'
 import { FaPaperPlane } from 'react-icons/fa'
 import { ChatContext } from '../../modules/ChatContext'
+import ProfilePicture from '../ProfilePicture'
 
 export default function Chat({
   address,
@@ -64,6 +65,15 @@ export default function Chat({
 
   return (
     <div id="chat">
+      {/* Peer info */}
+      <div className="peer">
+        {/* Picture */}
+        <ProfilePicture size={40} address="0xb715fC7e6CB5dF408b86E68F9F99C4D4733b139A" />
+
+        {/* Address */}
+        <small>0xb715fC7e6CB5dF408b86E68F9F99C4D4733b139A</small>
+      </div>
+
       {/* Messages */}
       <div className="message-scroller" ref={messageScrollerRef}>
         <div className="messages">
