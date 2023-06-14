@@ -72,8 +72,6 @@ export default function Chat({ address }: { address: string | null }) {
           })
           .map((message) => ({ ...message, type: getSenderType(message) })))
 
-  console.log(messages.map(({ sent }) => sent.getTime()))
-
   // useEffect(
   //   () => console.log('new chat:', chat),
   //   // () => console.log('new chat:', messages[messages.length - 1]),

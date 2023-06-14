@@ -17,6 +17,15 @@ export default function useChat(address: string | null) {
   // Store messages
   const [messages, setMessages] = useState<Chat['messages']>({})
 
+  // Set messages from array
+  const setMessagesFromArray = (newMessages: DecodedMessage[]) =>
+    setMessages((messages) => ({
+      ...messages,
+      ...Object.fromEntries(
+        newMessages.map((message) => [message.id, message])
+      ),
+    }))
+
   // Sync conversation to messenger
   useEffect(() => {
     // Treat empty chats
@@ -54,12 +63,7 @@ export default function useChat(address: string | null) {
       })
       .then((newMessages) => {
         // Add them
-        setMessages((messages) => ({
-          ...messages,
-          ...Object.fromEntries(
-            newMessages.map((message) => [message.id, message])
-          ),
-        }))
+        setMessagesFromArray(newMessages)
 
         // Start streaming new messages
         return conversation.streamMessages()
@@ -82,6 +86,8 @@ export default function useChat(address: string | null) {
         //   console.log('stream in:', message.content)
         // }
 
+        setMessagesFromArray(messageStream.messages)
+
         while (true) {
           // Get new message
           const { value, done } = await Promise.race([
@@ -92,7 +98,11 @@ export default function useChat(address: string | null) {
           console.log('stream in:', (value as any)?.content, done)
 
           // Stop if done
-          if (done) break
+          if (done) {
+            if (messageStream.unsubscribeFn != undefined)
+              messageStream.unsubscribeFn()
+            break
+          }
 
           // Get as message
           const message = value as DecodedMessage

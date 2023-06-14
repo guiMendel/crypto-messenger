@@ -153,14 +153,17 @@ export default function Messenger({ children }: { children: React.ReactNode }) {
           const message = value as DecodedMessage
 
           // Stop if done
-          if (done) return
+          if (done) {
+            messageStream.return(null)
+            break
+          }
 
           // Add the new conversation to the chats
           setChats((chats) => ({
             ...chats,
-            [message.senderAddress]: {
+            [message.conversation.peerAddress]: {
               messages: { [message.id]: message },
-              peerAddress: message.senderAddress,
+              peerAddress: message.conversation.peerAddress,
               latestMessage: message,
               send: (targetMessage) => message.conversation.send(targetMessage),
             },
