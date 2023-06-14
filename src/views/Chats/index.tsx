@@ -148,7 +148,7 @@ export default function Chats() {
           <FaArrowLeft />
         </div>
 
-        <Chat isHidden={selectedChat == null} />
+        <Chat address={selectedChat} />
       </div>
     </div>
   )

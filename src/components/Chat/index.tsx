@@ -1,18 +1,19 @@
-import { Conversation, DecodedMessage } from '@xmtp/xmtp-js'
+import { DecodedMessage } from '@xmtp/xmtp-js'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { FaPaperPlane } from 'react-icons/fa'
 import { MessengerContext } from '../../modules/MessengerContext'
+import useChat from '../../modules/useChat'
 import ProfilePicture from '../ProfilePicture'
 import './style.scss'
-import useChat from '../../modules/useChat'
 
-export default function Chat({
-  address,
-  isHidden,
-}: {
-  address?: string
-  isHidden?: boolean
-}) {
+type displayMessages = (Omit<DecodedMessage, 'toBytes'> & {
+  type: 'incoming' | 'outgoing'
+})[]
+
+// Hold last messages for animation sake
+let lastMessages: displayMessages = []
+
+export default function Chat({ address }: { address: string | null }) {
   // ==========================================
   // === HOTKEYS
   // ==========================================
@@ -43,7 +44,7 @@ export default function Chat({
     if (inputRef.current == null) return
 
     inputRef.current.style.height = '1px'
-    inputRef.current.style.height = 15 + inputRef.current.scrollHeight + 'px'
+    inputRef.current.style.height = inputRef.current.scrollHeight + 'px'
   }
 
   // Message content
@@ -58,7 +59,15 @@ export default function Chat({
 
   // Converts a message into either 'incoming' or 'outgoing'
   const getSenderType = (message: DecodedMessage): 'incoming' | 'outgoing' =>
-    message.senderAddress === address ? 'outgoing' : 'incoming'
+    message.senderAddress === address ? 'incoming' : 'outgoing'
+
+  // Store sorted messages
+  const messages: displayMessages = (lastMessages =
+    address == null || chat == null
+      ? lastMessages
+      : Object.values(chat.messages)
+          .sort(({ sent }) => sent.getTime())
+          .map((message) => ({ ...message, type: getSenderType(message) })))
 
   // ==========================================
   // === INBOX
@@ -69,12 +78,29 @@ export default function Chat({
 
   // Scroll to end of messages
   useEffect(() => {
-    if (messageScrollerRef.current == null || isHidden) return
+    if (messageScrollerRef.current == null || chat == null) return
 
     // Set scroll to end
     messageScrollerRef.current.scrollTop =
       messageScrollerRef.current.scrollHeight
-  }, [messageScrollerRef, isHidden])
+  }, [messageScrollerRef, chat])
+
+  // Gets readable date from message
+  const getTimestamp = ({ sent }: { sent: Date }) => {
+    const pad = (number: number) => String(number).padStart(2, '0')
+
+    // Get time difference
+    const dateDifference = new Date().getTime() - sent.getTime()
+
+    // If it's less than a day old
+    if (dateDifference <= 8.64e7)
+      return `${pad(sent.getHours())}:${pad(sent.getMinutes())}`
+
+    // Display as date
+    return `${pad(sent.getMonth())}/${pad(sent.getDay())}, ${pad(
+      sent.getHours()
+    )}:${pad(sent.getMinutes())}`
+  }
 
   return (
     <div id="chat">
@@ -91,30 +117,34 @@ export default function Chat({
 
       {/* Messages */}
       <div className="message-scroller" ref={messageScrollerRef}>
-        {chat && (
+        {messages.length > 0 && (
           <div className="messages">
-            {chat.messages.map((message) => (
-              <p key={message.id} className={getSenderType(message)}>
-                {message.content}
-              </p>
+            {messages.map((message) => (
+              <div key={message.id} className={message.type}>
+                {/* Content */}
+                <p>{message.content}</p>
+
+                {/* Timestamp */}
+                <small>{getTimestamp(message)}</small>
+              </div>
             ))}
-            {/* 
-            <p className="incoming">Sup brah</p>
-            <p className="incoming">Wyd</p>
-            <p className="outgoing">not much</p>
-            <p className="outgoing">u?</p>
-            <p className="incoming">Just checking ya out</p>
-            <p className="outgoing">ok</p>
-            <p className="incoming">What</p>
-            <p className="outgoing">what what</p>
-            <p className="incoming">Did you catch last week's episode?</p>
-            <p className="outgoing">bad batch?</p>
-            <p className="outgoing">hell yeah man. Love wrecker</p>
-            <p className="incoming">Don't get too attached to Tech though</p>
-            <p className="incoming">Just sayin</p>
-            <p className="outgoing">dude come the fuck on</p>
-            <p className="outgoing">are u srs right now</p>
-            <p className="incoming">Lol</p> */}
+            {/*
+      <p className="incoming">Sup brah</p>
+      <p className="incoming">Wyd</p>
+      <p className="outgoing">not much</p>
+      <p className="outgoing">u?</p>
+      <p className="incoming">Just checking ya out</p>
+      <p className="outgoing">ok</p>
+      <p className="incoming">What</p>
+      <p className="outgoing">what what</p>
+      <p className="incoming">Did you catch last week's episode?</p>
+      <p className="outgoing">bad batch?</p>
+      <p className="outgoing">hell yeah man. Love wrecker</p>
+      <p className="incoming">Don't get too attached to Tech though</p>
+      <p className="incoming">Just sayin</p>
+      <p className="outgoing">dude come the fuck on</p>
+      <p className="outgoing">are u srs right now</p>
+      <p className="incoming">Lol</p> */}
           </div>
         )}
       </div>

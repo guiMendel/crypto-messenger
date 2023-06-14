@@ -15,4 +15,10 @@
   &.selected {
     background-color: $strong-trans;
   }
+
+  small {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+  }
 }

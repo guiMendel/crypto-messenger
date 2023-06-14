@@ -164,9 +164,9 @@ export default function Messenger({ children }: { children: React.ReactNode }) {
           setChats((chats) => ({
             ...chats,
             [message.senderAddress]: {
-              messages: [message],
+              messages: { [message.id]: message },
               peerAddress: message.senderAddress,
-              latestMessage: message.content,
+              latestMessage: message,
             },
           }))
         }

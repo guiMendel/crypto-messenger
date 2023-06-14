@@ -4,21 +4,25 @@ import Chat from '../types/Chat.interface'
 // Turns conversation to chat
 export default function conversationToChat(
   conversation: Conversation,
-  messages?: DecodedMessage[]
+  messages?: Chat['messages']
 ): Chat {
+  let latestMessage: DecodedMessage | undefined
+
+  if (messages != undefined && Object.keys(messages).length > 0)
+    latestMessage = Object.values(messages).sort(({ sent }) =>
+      sent.getTime()
+    )[0]
+
   return {
-    messages: messages?.sort(({ sent }) => sent.getTime()) ?? [],
+    messages: messages ?? {},
     peerAddress: conversation.peerAddress,
-    latestMessage:
-      messages != undefined && messages.length > 0
-        ? messages[0].content
-        : undefined,
+    latestMessage,
   }
 }
 
 export async function conversationToChatInitialize(
   conversation: Conversation,
-  messages?: DecodedMessage[]
+  messages?: Chat['messages']
 ): Promise<Chat> {
   // Get one message for it
   const newMessages = await conversation.messages({ limit: 1 })
@@ -26,9 +30,12 @@ export async function conversationToChatInitialize(
   console.log('initialized with', newMessages)
 
   // Include this message
-  if (messages === undefined) messages = newMessages
-  else if (newMessages.length > 0 && messages.includes(newMessages[0]) == false)
-    messages = [...messages, newMessages[0]]
+  if (newMessages.length > 0) {
+    const [newMessage] = newMessages
+
+    if (messages === undefined) messages = { [newMessage.id]: newMessage }
+    else messages[newMessage.id] = newMessage
+  }
 
   // Get the chat
   return conversationToChat(conversation, messages)

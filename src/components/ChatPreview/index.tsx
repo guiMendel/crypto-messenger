@@ -1,8 +1,10 @@
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
+import { AiOutlineCheck } from 'react-icons/ai'
 import { MessengerContext } from '../../modules/MessengerContext'
 import Chat from '../../types/Chat.interface'
 import ProfilePicture from '../ProfilePicture'
 import './style.scss'
+
 
 export default function ChatPreview({ chat }: { chat: Chat }) {
   // Consume chats for current user
@@ -30,7 +32,14 @@ export default function ChatPreview({ chat }: { chat: Chat }) {
         <p>{chat.peerAddress}</p>
 
         {/* Latest message */}
-        {chat.latestMessage && <small>{chat.latestMessage}</small>}
+        {chat.latestMessage && (
+          <small>
+            {chat.latestMessage.senderAddress !== chat.peerAddress && (
+              <AiOutlineCheck />
+            )}
+            {chat.latestMessage.content}
+          </small>
+        )}
       </div>
     </div>
   )
