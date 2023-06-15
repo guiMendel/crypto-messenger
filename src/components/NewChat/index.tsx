@@ -1,11 +1,10 @@
-import { Client } from '@xmtp/xmtp-js'
 import { useContext } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { ControlInputContext } from '../../modules/ControlInputContext'
+import { MessengerContext } from '../../modules/MessengerContext'
 import '../ChatPreview/style.scss'
 import ProfilePicture from '../ProfilePicture'
 import './style.scss'
-import { MessengerContext } from '../../modules/MessengerContext'
 
 export default function NewChat() {
   // Consume input
@@ -17,14 +16,11 @@ export default function NewChat() {
   // Validate input
   const isValid = /^0x[a-fA-F0-9]{40}$/g.test(input)
 
-  // Check if address can receive messages
-  const canMessage = isValid && Client.canMessage(input)
-
   const navigate = useNavigate()
 
   // Create the new chat and open it
   const createAndOpenChat = async () => {
-    if (canMessage == false) return
+    if (isValid == false) return
 
     // Navigate home
     navigate('/')
@@ -43,10 +39,6 @@ export default function NewChat() {
   // Reject invalid address
   if (isValid == false)
     return <div id="new-chat">Not a valid Ethereum address</div>
-
-  // Reject addresses that can't receive messages
-  if (canMessage == false)
-    return <div id="new-chat">Can't message this address</div>
 
   // Preview this new chat
   return (

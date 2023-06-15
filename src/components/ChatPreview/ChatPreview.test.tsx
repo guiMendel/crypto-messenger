@@ -1,8 +1,8 @@
 import { render } from '@testing-library/react'
-import ChatPreview from '.'
-import { DecodedMessage } from '@xmtp/xmtp-js'
 import userEvent from '@testing-library/user-event'
+import { DecodedMessage } from '@xmtp/xmtp-js'
 import react from 'react'
+import ChatPreview from '.'
 
 describe('ChatPreview UX', () => {
   it('should display peer address and latest message', () => {
