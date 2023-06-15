@@ -1,0 +1,1 @@
+global.jooj = console.log
