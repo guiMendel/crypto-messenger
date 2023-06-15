@@ -1,11 +1,10 @@
+import '@testing-library/jest-dom'
 import { fireEvent, render } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { DecodedMessage } from '@xmtp/xmtp-js'
+import React from 'react'
 import Chat from '.'
 import ChatType from '../../types/Chat.interface'
-import { DecodedMessage } from '@xmtp/xmtp-js'
-import { date } from 'zod'
-import '@testing-library/jest-dom'
-import userEvent from '@testing-library/user-event'
-import React from 'react'
 
 // Returns a date 'offset' days ago
 const getDaysAgo = (offset: number) => {
