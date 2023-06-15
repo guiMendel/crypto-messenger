@@ -4,16 +4,8 @@ import userEvent from '@testing-library/user-event'
 import { DecodedMessage } from '@xmtp/xmtp-js'
 import React from 'react'
 import Chat from '.'
+import getDaysAgo from '../../helpers/getDaysAgo'
 import ChatType from '../../types/Chat.interface'
-
-// Returns a date 'offset' days ago
-const getDaysAgo = (offset: number) => {
-  let date = new Date()
-
-  date.setDate(date.getDate() - offset)
-
-  return date
-}
 
 // Mock useChat
 

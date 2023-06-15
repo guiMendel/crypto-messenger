@@ -9,8 +9,12 @@ export default function conversationToChat(
   let latestMessage: DecodedMessage | undefined
 
   if (messages != undefined && Object.keys(messages).length > 0)
-    latestMessage = Object.values(messages).sort(({ sent }) =>
-      sent.getTime()
+    latestMessage = Object.values(messages).sort(
+      ({ sent: sentA }, { sent: sentB }) => {
+        if (sentA.getTime() > sentB.getTime()) return -1
+        if (sentA.getTime() === sentB.getTime()) return 0
+        return 1
+      }
     )[0]
 
   return {
