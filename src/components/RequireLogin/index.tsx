@@ -1,11 +1,11 @@
 import { useDynamicContext } from '@dynamic-labs/sdk-react'
 import { useState } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
-import SignaturePending from './SignaturePending'
-import { SignaturePendingContext } from '../modules/SignaturePendingContext'
+import { SignaturePendingContext } from '../../modules/SignaturePendingContext'
+import SignaturePending from '../SignaturePending'
 
 export default function RequireLogin({
-  authenticationState = 'authenticated',
+  authenticationState,
   redirectTo,
 }: {
   authenticationState: 'authenticated' | 'not authenticated'
