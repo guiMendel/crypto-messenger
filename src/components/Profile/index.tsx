@@ -7,8 +7,6 @@ export default function Profile() {
 
   if (primaryWallet == null || user == null) return null
 
-  console.log(primaryWallet, user)
-
   return (
     <div id="profile">
       {/* Profile picture */}

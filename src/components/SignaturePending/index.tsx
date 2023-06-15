@@ -1,8 +1,8 @@
 import { useDynamicContext } from '@dynamic-labs/sdk-react'
-import { ReactComponent as PendingAnimation } from './pending.svg'
-import './style.scss'
 import { useContext } from 'react'
 import { SignaturePendingContext } from '../../modules/SignaturePendingContext'
+import { ReactComponent as PendingAnimation } from './pending.svg'
+import './style.scss'
 
 export default function SignaturePending() {
   const { handleLogOut } = useDynamicContext()
