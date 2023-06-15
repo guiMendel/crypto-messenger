@@ -32,7 +32,7 @@ describe('Chat UX', () => {
   beforeEach(() => {
     mockChat.messages = {}
     mockChat.peerAddress = address
-    ;(mockChat.send as jest.Mock<any, any, any>)
+    ;(mockChat.send as jest.Mock<any, any>)
       .mockClear()
       .mockResolvedValue({ content: '' })
     delete mockChat.latestMessage
