@@ -63,17 +63,11 @@ export default function Chat({ address }: { address: string | null }) {
       ? []
       : Object.values(chat.messages)
           .sort(({ sent: sentA }, { sent: sentB }) => {
-            if (sentA > sentB) return 1
-            if (sentA === sentB) return 0
+            if (sentA.getTime() > sentB.getTime()) return 1
+            if (sentA.getTime() === sentB.getTime()) return 0
             return -1
           })
           .map((message) => ({ ...message, type: getSenderType(message) }))
-
-  // useEffect(
-  //   () => console.log('new chat:', chat),
-  //   // () => console.log('new chat:', messages[messages.length - 1]),
-  //   [chat]
-  // )
 
   // ==========================================
   // === INBOX
@@ -132,7 +126,7 @@ export default function Chat({ address }: { address: string | null }) {
   useEffect(() => {
     if (inputRef.current == undefined) return
 
-    const sendOnEnter = ({ key, shiftKey, target }: KeyboardEvent) => {
+    const sendOnEnter = ({ key, shiftKey }: KeyboardEvent) => {
       // Send on enter
       if (key == 'Enter' && shiftKey == false) {
         sendRef.current?.click()
