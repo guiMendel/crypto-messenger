@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom'
 import { render } from '@testing-library/react'
 import Profile from '.'
 
@@ -9,9 +10,11 @@ const dynamicContext: {
   user: null,
 }
 
+const dynamicWidgetId = 'dynamic plz hire'
+
 jest.mock('@dynamic-labs/sdk-react', () => ({
   useDynamicContext: () => dynamicContext,
-  DynamicWidget: () => <div></div>,
+  DynamicWidget: () => <div data-testid={dynamicWidgetId}></div>,
 }))
 
 describe('Profile UX', () => {
@@ -21,12 +24,14 @@ describe('Profile UX', () => {
     expect(layout.baseElement.textContent).toBeFalsy()
   })
 
-  it('should display alias and address if authenticated', () => {
+  it('should display Dynamic widget, alias and address if authenticated', () => {
     dynamicContext.user = { alias: 'bob' }
     dynamicContext.primaryWallet = { address: '0xAddress' }
 
     const layout = render(<Profile />)
 
     expect(layout.baseElement.textContent).toContain(dynamicContext.user.alias)
+
+    expect(layout.getByTestId(dynamicWidgetId)).toBeInTheDocument()
   })
 })
