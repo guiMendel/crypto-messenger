@@ -12,6 +12,8 @@ Welcome to Whispr, the extraordinary messaging app that harnesses the power of b
 
 - **Immersive User Experience:** Immerse yourself in an intuitive interface designed to enhance your messaging journey. Navigate through chats effortlessly, relish smooth message streams, and delight in captivating visuals.
 
+- **Fully Responsive:** Whispr is built to adapt to your lifestyle. Whether you're using a smartphone, tablet, or desktop, Whispr delivers a consistent and seamless experience across all device dimensions. Stay connected on the go!
+
 ## Known Bug
 
 We believe in transparency, and we want to be honest with you, our fantastic Whispr community! Currently, we're addressing a small bug affecting message streaming in chats. Please note that **messages will start streaming only after two messages are sent or received**. We appreciate your understanding and patience.
