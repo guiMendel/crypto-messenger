@@ -416,10 +416,13 @@ describe('Chats synchronization', () => {
       (resolve) => (sendSecondMessage = resolve)
     )
 
+    // Spy on peer 1 send method
+    const peer1Send = jest.fn()
+
     // Messages to be sent
     const messagesToSend = [
       {
-        conversation: { peerAddress: peerAddress1, send: jest.fn() },
+        conversation: { peerAddress: peerAddress1, send: peer1Send },
         id: 'a',
       },
       {
@@ -464,6 +467,13 @@ describe('Chats synchronization', () => {
     // Should get it
     await waitFor(() => expect(result).toHaveProperty(peerAddress2))
     expect(Object.keys(result as any)).toHaveLength(2)
+
+    // Chat send should correspond to original conversation send
+    const testMessage = 'test'
+
+    result![peerAddress1].send(testMessage)
+
+    expect(peer1Send).toHaveBeenCalledWith(testMessage)
   })
 
   it('should stop streaming if effect collects', async () => {
