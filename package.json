@@ -48,5 +48,16 @@
   },
   "devDependencies": {
     "ts-jest": "^29.1.0"
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "config.ts",
+      "ControlInputContext.ts",
+      "MessengerContext.ts",
+      "SignaturePendingContext.ts"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.ts"
+    ]
   }
 }

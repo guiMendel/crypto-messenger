@@ -1,5 +1,5 @@
 import { Conversation, DecodedMessage, SortDirection } from '@xmtp/xmtp-js'
-import Chat from '../types/Chat.interface'
+import Chat from '../../types/Chat.interface'
 
 // Turns conversation to chat
 export default function conversationToChat(

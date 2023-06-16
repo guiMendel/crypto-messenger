@@ -1,9 +1,9 @@
 import { Conversation, DecodedMessage, SortDirection } from '@xmtp/xmtp-js'
 import { useContext, useEffect, useState } from 'react'
-import { MessengerContext } from './MessengerContext'
-import conversationToChat from './conversationToChat'
-import Chat from '../types/Chat.interface'
-import { initialMessageCount } from '../config'
+import { MessengerContext } from '../MessengerContext'
+import conversationToChat from '../conversationToChat'
+import Chat from '../../types/Chat.interface'
+import { initialMessageCount } from '../../config'
 
 // Syncs a single chat
 export default function useChat(address: string | null) {

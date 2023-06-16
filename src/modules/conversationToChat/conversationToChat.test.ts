@@ -1,9 +1,9 @@
 import { Conversation, DecodedMessage } from '@xmtp/xmtp-js'
-import getDaysAgo from '../helpers/getDaysAgo'
+import getDaysAgo from '../../helpers/getDaysAgo'
 import conversationToChat, {
   conversationToChatInitialize,
   conversationsToChats,
-} from './conversationToChat'
+} from '.'
 
 jest.mock('@xmtp/xmtp-js', () => ({
   Conversation: jest.fn().mockImplementation(() => ({})),

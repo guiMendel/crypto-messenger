@@ -1,11 +1,11 @@
 import { render, waitFor } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
-import Chat from '../types/Chat.interface'
-import useChat from './useChat'
-import { MessengerContext } from './MessengerContext'
-import conversationToChat from './conversationToChat'
+import Chat from '../../types/Chat.interface'
+import useChat from '.'
+import { MessengerContext } from '../MessengerContext'
+import conversationToChat from '../conversationToChat'
 import { Conversation } from '@xmtp/xmtp-js'
-import { initialMessageCount } from '../config'
+import { initialMessageCount } from '../../config'
 
 const address = '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
 const peerAddress = '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'
@@ -28,14 +28,14 @@ const messengerContext = {
 
 // Mock config
 
-jest.mock('../config', () => ({
+jest.mock('../../config', () => ({
   initialMessageCount: 1,
 }))
 
 // Mock conversation
 
 jest.mock(
-  './conversationToChat',
+  '../conversationToChat',
   () =>
     (
       conversation: { peerAddress: string; send: jest.Mock },
