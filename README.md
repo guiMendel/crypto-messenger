@@ -1,46 +1,34 @@
-# Getting Started with Create React App
+# Whispr: Unleash Secure Blockchain Messaging
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to Whispr, the extraordinary messaging app that harnesses the power of blockchain technology! With XMTP handling seamless messaging and Dynamic providing secure authentication through crypto wallets, Whispr takes your communication to a whole new level.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Secure Messaging:** Embrace the unbreakable security and immutability of the blockchain, ensuring your conversations remain confidential and tamper-proof in the digital realm.
 
-### `npm start`
+- **Decentralized Architecture:** Bid farewell to centralized worries! Whispr distributes messages across the blockchain network, eliminating single points of failure and ensuring the availability and resilience of your data.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Crypto Wallet Integration:** Seamlessly authenticate and access Whispr using your preferred crypto wallet through Dynamic. Enjoy a seamless login experience while keeping your private keys secure.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- **Immersive User Experience:** Immerse yourself in an intuitive interface designed to enhance your messaging journey. Navigate through chats effortlessly, relish smooth message streams, and delight in captivating visuals.
 
-### `npm test`
+## Known Bug
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+We believe in transparency, and we want to be honest with you, our fantastic Whispr community! Currently, we're addressing a small bug affecting message streaming in chats. Please note that **messages will start streaming only after two messages are sent or received**. We appreciate your understanding and patience.
 
-### `npm run build`
+## Test Coverage
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Quality is paramount to us at Whispr. Our codebase boasts an impressive 99.2% test coverage, ensuring reliability and robustness throughout the application. We strive for excellence, and our comprehensive testing practices showcase our commitment to providing you with the best messaging experience.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Getting Started
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+To embark on your Whispr journey, visit [Whispr](https://crypto-messenger.vercel.app) or follow these simple steps:
 
-### `npm run eject`
+1. Clone the repository: `git clone https://github.com/guiMendel/crypto-messenger.git`
+2. Install dependencies: `npm install`
+3. Launch Whispr: `npm start`
+4. Visit `http://localhost:3000` in your favorite web browser.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Stay connected, stay secure, and join the Whispr revolution today!
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+> "Whisper your words, unlock the magic of decentralized chats!"
