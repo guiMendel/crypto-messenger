@@ -1,6 +1,6 @@
 import { DynamicWidget } from '@dynamic-labs/sdk-react'
-import './style.scss'
 import { ReactComponent as ChatPicture } from './chat.svg'
+import './style.scss'
 
 export default function Login() {
   return (
