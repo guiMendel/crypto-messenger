@@ -54,10 +54,15 @@
       "config.ts",
       "ControlInputContext.ts",
       "MessengerContext.ts",
-      "SignaturePendingContext.ts"
+      "SignaturePendingContext.ts",
+      "src/index.tsx",
+      "react-app-env.d.ts",
+      "reportWebVitals.ts",
+      "Chat.interface.ts"
     ],
     "collectCoverageFrom": [
-      "src/**/*.ts"
+      "src/**/*.ts",
+      "src/**/*.tsx"
     ]
   }
 }
