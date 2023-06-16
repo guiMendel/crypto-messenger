@@ -3,9 +3,7 @@ import { useContext, useEffect, useState } from 'react'
 import { MessengerContext } from './MessengerContext'
 import conversationToChat from './conversationToChat'
 import Chat from '../types/Chat.interface'
-
-// How many messages to fetch initially
-const initialMessageCount = 20
+import { initialMessageCount } from '../config'
 
 // Syncs a single chat
 export default function useChat(address: string | null) {
@@ -72,22 +70,7 @@ export default function useChat(address: string | null) {
         return conversation.streamMessages()
       })
       .then(async (messageStream) => {
-        console.log('streaming new messages for', conversation.peerAddress)
-
-        // let stop = false
-
-        // cleanupPromise.then(() => {
-        //   stop = true
-        //   console.log('stream REQUEST STOP')
-        // })
-
-        // for await (const message of messageStream) {
-        //   if (stop) break
-
-        //   setMessages((messages) => ({ ...messages, [message.id]: message }))
-
-        //   console.log('stream in:', message.content)
-        // }
+        // console.log('streaming new messages for', conversation.peerAddress)
 
         // Get any cached messages
         setMessagesFromArray(messageStream.messages)
@@ -99,7 +82,7 @@ export default function useChat(address: string | null) {
             cleanupPromise,
           ])
 
-          console.log('stream in:', (value as any)?.content, done)
+          // console.log('stream in:', (value as any)?.content, done)
 
           // Stop if done
           if (done) {
@@ -115,9 +98,8 @@ export default function useChat(address: string | null) {
           setMessages((messages) => ({ ...messages, [message.id]: message }))
         }
 
-        console.log('FINISH streaming new messages')
+        // console.log('FINISH streaming new messages')
       })
-      .catch((error) => console.log('failed to stream messages', error))
 
     return stopStreaming
   }, [conversation])
