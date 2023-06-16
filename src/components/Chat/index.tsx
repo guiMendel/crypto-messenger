@@ -97,7 +97,7 @@ export default function Chat({ address }: { address: string | null }) {
       return `${pad(sent.getHours())}:${pad(sent.getMinutes())}`
 
     // Display as date
-    return `${pad(sent.getMonth())}/${pad(sent.getDay())}, ${pad(
+    return `${pad(sent.getMonth() + 1)}/${pad(sent.getDate())}, ${pad(
       sent.getHours()
     )}:${pad(sent.getMinutes())}`
   }

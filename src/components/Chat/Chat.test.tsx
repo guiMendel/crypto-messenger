@@ -59,11 +59,11 @@ describe('Chat UX', () => {
     )
 
     expect(layout.baseElement.textContent).toContain(
-      mockChat.messages.a.sent.getDay().toString()
+      mockChat.messages.a.sent.getDate().toString()
     )
 
     expect(layout.baseElement.textContent).toContain(
-      mockChat.messages.a.sent.getMonth().toString()
+      (mockChat.messages.a.sent.getMonth() + 1).toString()
     )
   })
 
